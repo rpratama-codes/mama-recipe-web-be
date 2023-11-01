@@ -1,10 +1,12 @@
-const express = require('express')
-const Router = express.Router()
+const router = require('express').Router()
 
-
-Router.get('/',()=>{
-
+//
+router.get('/', (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: 'OK',
+    data: []
+  })
 })
 
-module.exports =  Router
-
+module.exports = router

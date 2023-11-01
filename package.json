@@ -18,6 +18,11 @@
     "eslint-plugin-promise": "^6.0.0",
     "nodemon": "^3.0.1"
   },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "name": "receipes-web-be",
   "version": "1.0.0",
   "main": "index.js",
