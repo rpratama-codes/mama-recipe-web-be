@@ -11,3 +11,4 @@ const sql = postgres({
 module.exports = sql
 
 // export dalam variable sql
+
