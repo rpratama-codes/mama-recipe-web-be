@@ -4,27 +4,27 @@
 // yang di butuhkan BE
 
 const paramDetail = {
-	"receipt_uid": "string"
+  receipt_uid: 'string'
 }
 
 // BE mengembalikan
 
-const detailSuccess = {	
-	"status": 200,
-	"message": "ok",
-	"data" : [
-		{
-			"title" : "string",
-			"ingredient": "array of object",
-			"image" : "string",
-			"video_url" : "string",
-			"receipt_uid" : "uuid"
-		}
-	]
+const detailSuccess = {
+  status: 200,
+  message: 'ok',
+  data: [
+    {
+      title: 'string',
+      ingredient: 'array of object',
+      image: 'string',
+      video_url: 'string',
+      receipt_uid: 'uuid'
+    }
+  ]
 }
 
-const detailFailed = {	
-	"status": 404,
-	"message": "failed",
-	"data" : []
+const detailFailed = {
+  status: 404,
+  message: 'failed',
+  data: []
 }
