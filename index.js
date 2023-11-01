@@ -9,7 +9,7 @@ const router = require('./Routers')
 const { default: helmet } = require('helmet')
 
 const app = express()
-const port = process.env.APP_PORT | 3000
+const port = process.env.DB_PORT | 3000
 
 // MIDDLEWARE
 app.use(express.json())
