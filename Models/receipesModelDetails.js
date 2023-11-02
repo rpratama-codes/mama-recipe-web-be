@@ -1,6 +1,6 @@
 const database = require('../Utils/database')
 
-const receipesModels = { // parents bernama carsModel yang menampung method untuk pengolahan database
+const receipesModelsDetails = { // parents bernama carsModel yang menampung method untuk pengolahan database
 
   // method getAllCars untuk mengambil semua data dari table cars
 
@@ -16,4 +16,4 @@ const receipesModels = { // parents bernama carsModel yang menampung method untu
 
 }
 
-module.exports = receipesModels
+module.exports = receipesModelsDetails
