@@ -1,14 +1,19 @@
 const postgres = require('postgres') // import postgres
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
 const sql = postgres({
+
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
-  pass: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+  port: process.env.DB_PORT,
+  pass: process.env.DB_PASS
+
 })
 
-module.exports = sql
+console.log(process.env.DB_PASS)
 
-// export dalam variable sql
+module.exports = sql
 
