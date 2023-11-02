@@ -19,6 +19,25 @@ const commentsControllersDetails = {
     }
   },
 
+  _addComment: async (req, res) => {
+    try {
+      const { recipeUid, userUid, message } = req.body
+      const request = await commentsModelsDetail.addComment({ recipeUid, userUid, message })
+      res.status(201).json({
+        status: 201,
+        message: 'Comment Posted',
+        data: request
+      })
+    } catch (error) {
+      res.status(401).json({
+        status: false,
+        message: 'failed',
+        data: ['Please login first!!!'],
+        pp: console.log(error)
+      })
+    }
+  },
+
   _getCommentByUID: async (req, res) => {
     try {
       const { recipeUid } = req.params

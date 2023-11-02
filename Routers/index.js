@@ -15,6 +15,7 @@ router.get('/recipes', receipesControllerDetails._getAllReceipes)
 router.get('/recipes/:receiptUid', receipesControllerDetails._getRecipesByParams)
 // comment endpoint
 router.get('/comments', commentsControllerDetails._getAllComments)
+router.post('/comments', commentsControllerDetails._addComment)
 router.get('/recipes/:recipeUid/detail/comments', commentsControllerDetails._getCommentByUID)
 
 module.exports = router
