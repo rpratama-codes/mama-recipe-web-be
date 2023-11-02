@@ -1,7 +1,3 @@
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
-
 const postgres = require('postgres') // import postgres
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
@@ -20,4 +16,3 @@ const sql = postgres({
 console.log(process.env.DB_PASS)
 
 module.exports = sql
-
