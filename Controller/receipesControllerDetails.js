@@ -37,7 +37,7 @@ const receipesControllerDetails = {
 
   _getRecipesByTitle: async (req, res) => {
     try {
-      const { title } = req.params
+      const { title } = req.body
 
       const request = await receipesModelsDetails.getRecipesByTitle(title)
       res.status(200).json({
