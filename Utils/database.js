@@ -1,7 +1,3 @@
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
-
 const postgres = require('postgres') // import postgres
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
