@@ -13,9 +13,9 @@ router.get('/', (req, res) => {
   })
 })
 // receipes endpoint
-router.get('/recipes', receipesControllerDetails._getAllReceipes)
+router.get('/recipes/allRecipes', receipesControllerDetails._getAllReceipes)
 router.get('/recipes/:receiptUid', receipesControllerDetails._getRecipesByParams)
-router.get('/recipes/:title/detail')
+router.get('/recipes/:title/detail', receipesControllerDetails._getRecipesByTitle)
 // comment endpoint
 router.get('/comments', commentsControllerDetails._getAllComments)
 router.post('/comments', commentsControllerDetails._addComment)

@@ -33,6 +33,24 @@ const receipesControllerDetails = {
         massage: 'Somethin Wrong in Server'
       })
     }
+  },
+
+  _getRecipesByTitle: async (req, res) => {
+    try {
+      const { title } = req.params
+
+      const request = await receipesModelsDetails.getRecipesByTitle(title)
+      res.status(200).json({
+        status: 200,
+        message: 'ok',
+        data: request
+      })
+    } catch (error) {
+      res.status(502).json({
+        status: false,
+        massage: 'Somethin Wrong in Serverss'
+      })
+    }
   }
 
 }
