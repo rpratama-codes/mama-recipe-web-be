@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const receipesController = require('../Controller/receipesController')
+
+const receipeHomeController = require('../Controller/recipeHomeController')
+const receipesControllerDetails = require('../Controller/receipesControllerDetails')
+const commentsControllerDetails = require('../Controller/commentsControllerDetails')
 //
 router.get('/', (req, res) => {
   return res.status(200).json({
