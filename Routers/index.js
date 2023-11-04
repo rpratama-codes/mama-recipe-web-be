@@ -32,6 +32,6 @@ router.get('/recipes/popular', receipeHomeController.getListRecipe_Controller)
 
 // user endpoint
 router.post('/user/register', userControllers._userRegister)
-router.get('/user/login')
+router.post('/user/login', userControllers._userLogin)
 
 module.exports = router

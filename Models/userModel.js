@@ -9,7 +9,7 @@ const userModels = {
       const request = await database`SELECT * FROM users WHERE email = ${email}`
       return request
     } catch (error) {
-
+      console.log(error)
     }
   },
 

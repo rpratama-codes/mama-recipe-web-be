@@ -69,6 +69,39 @@ const userControllers = {
         message: error.message
       })
     }
+  },
+  _userLogin: async (req, res) => {
+    try {
+      const { email, password } = req.body
+
+      const checkMail = await userModels.modelCheckEmail(email)
+      if (!checkMail.length) {
+        res.status(404).send({
+          status: false,
+          message: 'email not found, please register first'
+        })
+      }
+
+      console.log(checkMail[0].password)
+
+      const isPassMatch = bcrypt.compareSync(password, checkMail[0].password)
+
+      if (isPassMatch) {
+        const token = jwt.sign(checkMail[0], process.env.APP_SECRET_TOKEN)
+        res.status(200).send({
+          status: true,
+          message: 'Login Succes !',
+          keyToken: token
+        })
+      } else {
+        res.status(404).send({
+          status: false,
+          message: 'Wrong Password !!!'
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
