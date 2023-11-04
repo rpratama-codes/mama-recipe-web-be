@@ -12,6 +12,15 @@ const receipesModelsDetails = { // parents bernama carsModel yang menampung meth
   getRecipesByParams: async (receiptUid) => {
     const request = await database`SELECT * FROM receipts WHERE receipt_uid = ${receiptUid}`
     return request
+  },
+
+  getRecipesByTitle: async (title) => {
+    try {
+      const request = await database`SELECT * FROM receipts ${!title ? database`` : database`where title ilike ${String('%') + title + String('%')}`}`
+      return request
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 }

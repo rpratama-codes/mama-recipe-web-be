@@ -14,7 +14,8 @@ const port = process.env.APP_PORT | 3000
 // MIDDLEWARE
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(cors({ origin: 'localhost' }))
+// cors for limit acces just on url FE
+app.use(cors({ origin: 'process.env.FE_URI' }))
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }))
 app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: false }))
