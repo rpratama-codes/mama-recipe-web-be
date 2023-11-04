@@ -102,6 +102,17 @@ const userControllers = {
     } catch (error) {
       console.log(error)
     }
+  },
+  _userLoginProfile: async (req, res) => {
+    const token = req.headers.authorization.slice(7)
+    console.log(token)
+    const decoded = jwt.verify(token, process.env.APP_SECRET_TOKEN)
+    const request = await userModels.modelDetailUser(decoded)
+    res.status(200).send({
+      status: true,
+      message: 'Please Keep Your Data Save',
+      data: request
+    })
   }
 }
 

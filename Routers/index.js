@@ -1,10 +1,14 @@
 const express = require('express')
 const router = express.Router()
 
+// controller
 const receipeHomeController = require('../Controller/recipeHomeController')
 const receipesControllerDetails = require('../Controller/receipesControllerDetails')
 const commentsControllerDetails = require('../Controller/commentsControllerDetails')
 const userControllers = require('../Controller/userController')
+
+// midleware
+const checkJwt = require('../Middleware/checkJWT')
 //
 router.get('/', (req, res) => {
   return res.status(200).json({
@@ -33,5 +37,6 @@ router.get('/recipes/popular', receipeHomeController.getListRecipe_Controller)
 // user endpoint
 router.post('/user/register', userControllers._userRegister)
 router.post('/user/login', userControllers._userLogin)
+router.post('/user/login/profile', checkJwt.jwtTokenDecode, userControllers._userLoginProfile)
 
 module.exports = router

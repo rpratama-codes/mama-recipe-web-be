@@ -25,6 +25,15 @@ const userModels = {
     } catch (error) {
       console.log(error)
     }
+  },
+
+  modelDetailUser: async (decoded) => {
+    try {
+      const request = await database`SELECT first_name,last_name,role,email,photo_profile FROM users WHERE id = ${decoded.id}`
+      return request
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 }
