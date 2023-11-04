@@ -19,7 +19,8 @@ router.get('/recipes/:receiptUid', receipesControllerDetails._getRecipesByParams
 router.get('/comments', commentsControllerDetails._getAllComments)
 router.post('/comments', commentsControllerDetails._addComment)
 router.get('/recipes/:recipeUid/detail/comments', commentsControllerDetails._getCommentByUID)
-
-router.get('/recipes/popular/:y', receipeHomeController.getPopulareRecipe_Controller)
-router.get('/recipes/popular', receipeHomeController.getListRecipe_Controller)
+// recipe Popular endpoint
+router.get('/home/popular', receipeHomeController.getPopulareRecipe_Controller)
+router.get('/home/list', receipeHomeController.getListRecipe_Controller)
+router.get('/home/new', receipeHomeController.getNewRecipe_Controller)
 module.exports = router
