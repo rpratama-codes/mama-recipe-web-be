@@ -10,7 +10,14 @@ const Joi = require('joi').extend(require('@joi/date'))
 const userControllers = {
   _userRegister: async (req, res) => {
     try {
-      const { firstName, lastName, role, verified, phoneNumber, email, userUid, password, photoProfile, createAt, updateAt } = req.body
+      // generate uuid user
+      const { v4: uuidv4 } = require('uuid')
+      const userUuid = uuidv4()
+
+      // default role
+      const role = 'user'
+
+      const { firstName, lastName, email, password } = req.body
       const schema = Joi.object({
         firstName: Joi.string()
           .min(6)
@@ -20,27 +27,16 @@ const userControllers = {
           .min(6)
           .max(15)
           .required(),
-        role: Joi.string()
-          .min(4)
-          .max(6)
-          .required(),
-        verified: Joi.boolean()
-          .required(),
-        phoneNumber: Joi.string().min(10).max(16).required(),
         email: Joi.string()
           .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-        userUid: Joi.string()
-          .guid({
-            version: [
-              'uuidv4',
-              'uuidv5'
-            ]
-          }),
+        userUid: Joi.string().guid({
+          version: [
+            'uuidv4',
+            'uuidv5'
+          ]
+        }),
         password: Joi.string()
-          .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
-        photoProfile: Joi.string(),
-        createAt: Joi.date().format('YYYY-MM-DD').utc(),
-        updateAt: Joi.date().format('YYYY-MM-DD').utc()
+          .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
       })
 
       await schema.validateAsync(req.body)
@@ -55,9 +51,7 @@ const userControllers = {
         return
       }
 
-      const request = await userModels.modelUserRegister({
-        firstName, lastName, role, verified, phoneNumber, email, userUid, password, photoProfile, createAt, updateAt
-      })
+      const request = await userModels.modelUserRegister({ firstName, lastName, role, email, userUuid, password })
       res.status(200).send({
         status: true,
         message: 'succes',
@@ -66,7 +60,7 @@ const userControllers = {
     } catch (error) {
       res.status(500).send({
         status: false,
-        message: error.message
+        message: error
       })
     }
   },
