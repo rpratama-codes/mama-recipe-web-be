@@ -10,6 +10,13 @@ const Joi = require('joi').extend(require('@joi/date'))
 const userControllers = {
   _userRegister: async (req, res) => {
     try {
+      // generate uuid user
+      const { v4: uuidv4 } = require('uuid')
+      const userUuid = uuidv4()
+
+      // default role
+      const role = 'user'
+
       const { firstName, lastName, email, password } = req.body
       const schema = Joi.object({
         firstName: Joi.string()
@@ -22,6 +29,12 @@ const userControllers = {
           .required(),
         email: Joi.string()
           .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+        userUid: Joi.string().guid({
+          version: [
+            'uuidv4',
+            'uuidv5'
+          ]
+        }),
         password: Joi.string()
           .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
       })
@@ -38,7 +51,7 @@ const userControllers = {
         return
       }
 
-      const request = await userModels.modelUserRegister({ firstName, lastName, email, password })
+      const request = await userModels.modelUserRegister({ firstName, lastName, role, email, userUuid, password })
       res.status(200).send({
         status: true,
         message: 'succes',
