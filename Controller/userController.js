@@ -17,6 +17,9 @@ const userControllers = {
       // default role
       const role = 'user'
 
+      // default photo profile
+      const photoProfile = 'https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png'
+
       const { firstName, lastName, email, password } = req.body
       const schema = Joi.object({
         firstName: Joi.string()
@@ -36,31 +39,37 @@ const userControllers = {
           ]
         }),
         password: Joi.string()
+          // eslint-disable-next-line prefer-regex-literals
           .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
       })
 
       await schema.validateAsync(req.body)
 
       const checkEmail = await userModels.modelCheckEmail(email)
-      if (checkEmail.length > 0) {
-        res.send({
-          status: false,
-          message: 'Email Already Registered'
-        })
 
-        return
+      if (checkEmail.length > 0) {
+        // eslint-disable-next-line no-throw-literal
+        throw { type: 'hasdata', message: 'email already registered' }
       }
 
-      const request = await userModels.modelUserRegister({ firstName, lastName, role, email, userUuid, password })
+      const request = await userModels.modelUserRegister({ firstName, lastName, role, email, userUuid, password, photoProfile })
       res.status(200).send({
         status: true,
         message: 'succes',
         data: request
       })
     } catch (error) {
-      res.status(500).send({
+      if (error.type === 'hasdata') {
+        res.status(409).json({
+          status: false,
+          massage: 'email already registered'
+        })
+        return
+      }
+      res.status(422).send({
         status: false,
-        message: error
+        message: error.message
+
       })
     }
   },

@@ -40,19 +40,28 @@ const receipesControllerDetails = {
       const { title } = req.body
 
       const request = await receipesModelsDetails.getRecipesByTitle(title)
+      if (request.length === 0) {
+        // eslint-disable-next-line no-throw-literal
+        throw { type: 'nodata', message: 'data not found' }
+      }
       res.status(200).json({
         status: 200,
         message: 'ok',
         data: request
       })
     } catch (error) {
-      res.status(502).json({
+      if (error.type === 'nodata') {
+        res.status(404).json({
+          status: false,
+          massage: 'data not found'
+        })
+        return
+      }
+      res.status(500).json({
         status: false,
-        massage: 'Somethin Wrong in Serverss'
+        massage: error
       })
     }
   }
-
 }
-
 module.exports = receipesControllerDetails
