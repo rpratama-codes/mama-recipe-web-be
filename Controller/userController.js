@@ -58,9 +58,10 @@ const userControllers = {
         data: request
       })
     } catch (error) {
-      res.status(500).send({
+      res.status(422).send({
         status: false,
-        message: error
+        message: error.message
+
       })
     }
   },

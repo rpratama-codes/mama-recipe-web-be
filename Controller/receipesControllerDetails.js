@@ -46,7 +46,7 @@ const receipesControllerDetails = {
         data: request
       })
     } catch (error) {
-      res.status(502).json({
+      res.status(400).json({
         status: false,
         massage: 'Somethin Wrong in Serverss'
       })
