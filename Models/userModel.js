@@ -15,12 +15,12 @@ const userModels = {
 
   modelUserRegister: async (payload) => {
     try {
-      const { firstName, lastName, role, email, userUuid, password } = payload
+      const { firstName, lastName, role, email, userUuid, password, photoProfile } = payload
       const saltRounds = 10
       const salt = bcrypt.genSaltSync(saltRounds)
       const hash = bcrypt.hashSync(password, salt)
-      const request = await database`INSERT INTO users(first_name, last_name, role, email, user_uid, password)
-      VALUES (${firstName}, ${lastName},${role}, ${email},${userUuid},${hash});`
+      const request = await database`INSERT INTO users(first_name, last_name, role, email, user_uid, password, photo_profile)
+      VALUES (${firstName}, ${lastName},${role}, ${email},${userUuid},${hash},${photoProfile});`
       return request
     } catch (error) {
       console.log(error)

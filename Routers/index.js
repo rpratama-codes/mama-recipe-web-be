@@ -25,7 +25,7 @@ router.get('/recipes/:receiptUid', receipesControllerDetails._getRecipesByParams
 // comment endpoint
 router.get('/comments', commentsControllerDetails._getAllComments)
 router.post('/comments', commentsControllerDetails._addComment)
-router.post('/recipes/:title/detail', receipesControllerDetails._getRecipesByTitle)
+router.post('/recipes/detail', receipesControllerDetails._getRecipesByTitle)
 router.get('/recipes/:recipeUid/detail/comments', commentsControllerDetails._getCommentByUID)
 
 // recipe Popular endpoint
