@@ -91,17 +91,18 @@ const userControllers = {
         throw { message: 'wrong password' }
       }
 
-      const jwtMessage = {
+      const data = {
         user_uid: checkMail[0].user_uid,
         first_name: checkMail[0].first_name,
         last_name: checkMail[0].last_name,
         photo_profile: checkMail[0].photo_profile
 
       }
-      const token = jwt.sign(jwtMessage, process.env.APP_SECRET_TOKEN)
+      const token = jwt.sign(data, process.env.APP_SECRET_TOKEN)
       res.status(200).send({
         status: true,
         message: 'Login Succes !',
+        data,
         token
       })
     } catch (error) {
