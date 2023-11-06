@@ -79,10 +79,8 @@ const userControllers = {
 
       const checkMail = await userModels.modelCheckEmail(email)
       if (!checkMail.length) {
-        res.status(404).send({
-          status: false,
-          message: 'email not found, please register first'
-        })
+        // eslint-disable-next-line no-throw-literal
+        throw { type: 'nodata', message: 'email not found, please register first' }
       }
 
       console.log(checkMail[0].password)
@@ -93,17 +91,23 @@ const userControllers = {
         const token = jwt.sign(checkMail[0], process.env.APP_SECRET_TOKEN)
         res.status(200).send({
           status: true,
+          result: checkMail[0],
           message: 'Login Succes !',
           keyToken: token
         })
       } else {
-        res.status(404).send({
+        res.status(401).send({
           status: false,
           message: 'Wrong Password !!!'
         })
       }
     } catch (error) {
-      console.log(error)
+      if (error.type === 'nodata') {
+        res.status(404).json({
+          status: false,
+          massage: 'email not found, please register first'
+        })
+      }
     }
   },
   _userLoginProfile: async (req, res) => {
