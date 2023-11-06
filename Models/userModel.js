@@ -3,16 +3,10 @@ const database = require('../Utils/database')
 const bcrypt = require('bcrypt')
 
 const userModels = {
-
   modelCheckEmail: async (email) => {
-    try {
-      const request = await database`SELECT email FROM users WHERE email = ${email}`
-      return request
-    } catch (error) {
-      console.log(error)
-    }
+    const request = await database`SELECT * FROM users WHERE email = ${email}`
+    return request
   },
-
   modelUserRegister: async (payload) => {
     const { firstName, lastName, role, email, userUuid, password, photoProfile } = payload
     const saltRounds = 3
@@ -22,16 +16,10 @@ const userModels = {
       VALUES (${firstName}, ${lastName},${role}, ${email},${userUuid},${hash},${photoProfile}) returning user_uid;`
     return request
   },
-
   modelDetailUser: async (decoded) => {
-    try {
-      const request = await database`SELECT first_name,last_name,role,email,photo_profile FROM users WHERE id = ${decoded.id}`
-      return request
-    } catch (error) {
-      console.log(error)
-    }
+    const request = await database`SELECT first_name,last_name,email,photo_profile FROM users WHERE id = ${decoded.id}`
+    return request
   }
-
 }
 
 module.exports = userModels

@@ -72,47 +72,66 @@ const userControllers = {
     try {
       const { email, password } = req.body
 
+      const schema = Joi.object({
+        email: Joi.string().email().required(),
+        password: Joi.string().required()
+      })
+
+      await schema.validateAsync(req.body)
+
       const checkMail = await userModels.modelCheckEmail(email)
-      if (!checkMail.length) {
-        // eslint-disable-next-line no-throw-literal
+
+      if (checkMail.length === 0) {
         throw { type: 'nodata', message: 'email not found, please register first' }
       }
 
-      console.log(checkMail[0].password)
-
       const isPassMatch = bcrypt.compareSync(password, checkMail[0].password)
 
-      if (isPassMatch) {
-        const token = jwt.sign(checkMail[0], process.env.APP_SECRET_TOKEN)
-        res.status(200).send({
-          status: true,
-          result: checkMail[0],
-          message: 'Login Succes !',
-          keyToken: token
-        })
-      } else {
-        res.status(401).send({
-          status: false,
-          message: 'Wrong Password !!!'
-        })
+      if (!isPassMatch) {
+        throw { message: 'wrong password' }
       }
+
+      const jwtMessage = {
+        user_uid: checkMail[0].user_uid,
+        first_name: checkMail[0].first_name,
+        last_name: checkMail[0].last_name,
+        photo_profile: checkMail[0].photo_profile
+
+      }
+      const token = jwt.sign(jwtMessage, process.env.APP_SECRET_TOKEN)
+      res.status(200).send({
+        status: true,
+        message: 'Login Succes !',
+        token
+      })
     } catch (error) {
       if (error.type === 'nodata') {
         res.status(404).json({
           status: false,
           massage: 'email not found, please register first'
         })
+      } else if (error.message === 'wrong password') {
+        res.status(401).send({
+          status: false,
+          message: 'Wrong Password !!!'
+        })
+      } else if (
+        error.message.includes('is not allowed to be empty') ||
+        error.message.includes('must be a valid email')) {
+        res.status(422).send({
+          status: false,
+          message: error.message
+        })
       }
     }
   },
   _userLoginProfile: async (req, res) => {
     const token = req.headers.authorization.slice(7)
-    console.log(token)
     const decoded = jwt.verify(token, process.env.APP_SECRET_TOKEN)
     const request = await userModels.modelDetailUser(decoded)
     res.status(200).send({
       status: true,
-      message: 'Please Keep Your Data Save',
+      message: 'ok',
       data: request
     })
   }
