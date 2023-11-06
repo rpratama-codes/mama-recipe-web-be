@@ -1,6 +1,6 @@
 # Mama Recipes Web Apps
 <p align="center">
-  <img width="460" height="300" src="![logo](https://github.com/arsyad12/receipes-web-be/assets/33723389/e4edd11c-d736-4be1-be92-93ac8bdf3e26)">
+  <img width="460" height="300" src=![logo](https://github.com/arsyad12/receipes-web-be/assets/33723389/e4edd11c-d736-4be1-be92-93ac8bdf3e26)>
 </p>
 
 
