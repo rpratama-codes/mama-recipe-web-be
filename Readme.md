@@ -1,6 +1,6 @@
 # Mama Recipes Web Apps
 <p align="center">
-  <img width="460" height="300" src="https://imgur.com/CmtnO2V">
+  <img width="460" height="300" src="https://ibb.co/Y88wvGF">
 </p>
 
 
