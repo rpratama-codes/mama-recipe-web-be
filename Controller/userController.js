@@ -1,3 +1,4 @@
+/* eslint-disable no-throw-literal */
 // import model for acces database
 const userModels = require('../Models/userModel')
 // import jwt for make token
@@ -21,26 +22,12 @@ const userControllers = {
       const photoProfile = 'https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png'
 
       const { firstName, lastName, email, password } = req.body
+
       const schema = Joi.object({
-        firstName: Joi.string()
-          .min(6)
-          .max(15)
-          .required(),
-        lastName: Joi.string()
-          .min(6)
-          .max(15)
-          .required(),
-        email: Joi.string()
-          .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-        userUid: Joi.string().guid({
-          version: [
-            'uuidv4',
-            'uuidv5'
-          ]
-        }),
-        password: Joi.string()
-          // eslint-disable-next-line prefer-regex-literals
-          .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+        firstName: Joi.string().min(1).max(20).required(),
+        lastName: Joi.string().min(1).max(20).required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().required()
       })
 
       await schema.validateAsync(req.body)
@@ -48,13 +35,13 @@ const userControllers = {
       const checkEmail = await userModels.modelCheckEmail(email)
 
       if (checkEmail.length > 0) {
-        // eslint-disable-next-line no-throw-literal
         throw { type: 'hasdata', message: 'email already registered' }
       }
 
       const request = await userModels.modelUserRegister({ firstName, lastName, role, email, userUuid, password, photoProfile })
-      res.status(200).send({
-        status: true,
+
+      res.status(201).send({
+        status: 201,
         message: 'succes',
         data: request
       })
@@ -64,13 +51,21 @@ const userControllers = {
           status: false,
           massage: 'email already registered'
         })
-        return
+      } else if (
+        error.message.includes('is not allowed to be empty') ||
+        error.message.includes('must be a valid email') ||
+        error.message.includes('length must be less than or equal')) {
+        res.status(422).send({
+          status: false,
+          message: error.message
+        })
+      } else {
+        console.log(error)
+        res.status(500).send({
+          status: false,
+          message: 'internal server error'
+        })
       }
-      res.status(422).send({
-        status: false,
-        message: error.message
-
-      })
     }
   },
   _userLogin: async (req, res) => {
