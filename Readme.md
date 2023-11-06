@@ -1,7 +1,5 @@
 # Mama Recipes Web Apps
-<p align="center">
-  <img width="460" height="300" src="https://ibb.co/Y88wvGF">
-</p>
+<img src="https://picsum.photos/460/300" align="right" height="220" width="210" />
 
 
 # decription
