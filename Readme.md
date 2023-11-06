@@ -58,3 +58,5 @@ APP_HOST=
 npm run start
 ```
 # API collection
+
+[https://documenter.getpostman.com/view/30080582/2s9YXfc3aV]
