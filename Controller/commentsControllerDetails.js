@@ -55,18 +55,14 @@ const commentsControllersDetails = {
       await schema.validateAsync(req, validateOptions)
 
       const { recipeUid, userUid, message } = req.body
-      const token = req?.headers?.authorization?.split('Bearer ')[1]
+      const { authorization } = req.headers
 
-      const auth = await jwt.verify(token, process.env.JWT_SECRET)
-
-      if (!auth || auth?.includes('JsonWebTokenError')) {
-        throw { message: 'unautorize', success: false, status: 401 }
-      }
+      await jwt.verify(authorization.split('Bearer ')[1], process.env.APP_SECRET_TOKEN)
 
       const request = await commentsModelsDetail.addComment({ recipeUid, userUid, message })
 
       if (request.length === 0) {
-        throw { message: 'failed post a comment', success: false, status: 500 }
+        throw { message: 'failed post a comment', success: false, status: 400 }
       }
 
       res.status(201).json({
@@ -75,14 +71,22 @@ const commentsControllersDetails = {
         data: request
       })
     } catch (error) {
-      if (error.status === 422 ||
-        error.message.includes('is required') ||
-        error.message.includes('not allowed to be empty')) {
+      if (error?.detail?.includes('is not present in table')) {
+        res.status(400).json({
+          status: 400,
+          message: 'Post comment failed due to recipe not found'
+        })
+      } else if (
+        error.status === 422 ||
+        error?.message?.includes('must be a string') ||
+        error?.message?.includes('is required') ||
+        error?.message?.includes('not allowed to be empty') ||
+        error?.message?.includes('must be a valid GUID')) {
         res.status(422).json({
           status: 422,
           message: String(error.message).replaceAll('"', "'").split('. ')
         })
-      } else if (error.status === 401 || error.name === 'JsonWebTokenError') {
+      } else if (error?.status === 401 || error?.name === 'JsonWebTokenError') {
         res.status(401).json({
           status: 401,
           message: 'unautorize'
