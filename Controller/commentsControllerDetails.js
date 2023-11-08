@@ -1,40 +1,98 @@
+/* eslint-disable no-throw-literal */
+const jwt = require('jsonwebtoken')
 const commentsModelsDetail = require('../Models/commentsModelsDetails')
+const Joi = require('joi')
 
 const commentsControllersDetails = {
 
   _getAllComments: async (req, res) => {
     try {
       const request = await commentsModelsDetail.getAllComment()
+
+      if (request.length === 0) {
+        throw { message: 'No comment found', success: false, status: 404 }
+      }
+
       res.status(200).json({
         status: 200,
         message: 'ok',
         data: request
       })
     } catch (error) {
-      res.status(404).json({
-        status: false,
-        message: 'failed',
-        data: ['No comment found']
-      })
+      if (error.status === 404) {
+        res.status(404).json({
+          status: error.status,
+          message: error.message
+        })
+      } else {
+        res.status(500).json({
+          status: 500,
+          message: 'internal application error'
+        })
+      }
     }
   },
 
   _addComment: async (req, res) => {
     try {
+      const schema = Joi.object({
+        headers: Joi.object({
+          authorization: Joi.string().required()
+        }),
+        body: Joi.object({
+          recipeUid: Joi.string().uuid().required(),
+          userUid: Joi.string().uuid().required(),
+          message: Joi.string().min(2).max(150).required()
+        })
+      })
+
+      const validateOptions = {
+        abortEarly: false, // include all errors
+        allowUnknown: true, // ignore unknown props
+        stripUnknown: true // remove unknown props
+      }
+
+      await schema.validateAsync(req, validateOptions)
+
       const { recipeUid, userUid, message } = req.body
+      const token = req?.headers?.authorization?.split('Bearer ')[1]
+
+      const auth = await jwt.verify(token, process.env.JWT_SECRET)
+
+      if (!auth || auth?.includes('JsonWebTokenError')) {
+        throw { message: 'unautorize', success: false, status: 401 }
+      }
+
       const request = await commentsModelsDetail.addComment({ recipeUid, userUid, message })
+
+      if (request.length === 0) {
+        throw { message: 'failed post a comment', success: false, status: 500 }
+      }
+
       res.status(201).json({
         status: 201,
-        message: 'Comment Posted',
+        message: 'comment posted',
         data: request
       })
     } catch (error) {
-      res.status(401).json({
-        status: false,
-        message: 'failed',
-        data: ['Please login first!!!'],
-        pp: console.log(error)
-      })
+      if (error.status === 422 ||
+        error.message.includes('is required') ||
+        error.message.includes('not allowed to be empty')) {
+        res.status(422).json({
+          status: 422,
+          message: String(error.message).replaceAll('"', "'").split('. ')
+        })
+      } else if (error.status === 401 || error.name === 'JsonWebTokenError') {
+        res.status(401).json({
+          status: 401,
+          message: 'unautorize'
+        })
+      } else {
+        res.status(500).json({
+          status: 500,
+          message: 'internal application error'
+        })
+      }
     }
   },
 
