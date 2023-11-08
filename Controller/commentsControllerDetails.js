@@ -61,10 +61,6 @@ const commentsControllersDetails = {
 
       const request = await commentsModelsDetail.addComment({ recipeUid, userUid, message })
 
-      if (request.length === 0) {
-        throw { message: 'failed post a comment', success: false, status: 400 }
-      }
-
       res.status(201).json({
         status: 201,
         message: 'comment posted',
