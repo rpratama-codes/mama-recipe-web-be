@@ -20,9 +20,22 @@ const userModels = {
     const saltRounds = 3
     const salt = bcrypt.genSaltSync(saltRounds)
     const hash = bcrypt.hashSync(password, salt)
-    const request =
-      await database`INSERT INTO users(first_name, last_name, role, email, user_uid, password, photo_profile)
-      VALUES (${firstName}, ${lastName},${role}, ${email},${userUuid},${hash},${photoProfile}) returning user_uid;`
+    const insertValue = [
+      {
+        first_name: firstName,
+        last_name: lastName,
+        role,
+        user_uid: userUuid,
+        email,
+        photo_profile: photoProfile,
+        password: hash,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ]
+    const request = await database`INSERT INTO users ${database(
+      insertValue
+    )} returning user_uid;`
     return request
   },
   modelDetailUser: async (decoded) => {
