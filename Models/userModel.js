@@ -40,7 +40,7 @@ const userModels = {
   },
   modelDetailUser: async (decoded) => {
     const request =
-      await database`SELECT first_name,last_name,email,photo_profile FROM users WHERE id = ${decoded.id}`
+      await database` SELECT first_name,last_name,phone_number,email,photo_profile FROM users WHERE user_uid = ${decoded.user_uid}`
     return request
   }
 }
