@@ -19,7 +19,8 @@ const userControllers = {
       const role = 'user'
 
       // default photo profile
-      const photoProfile = 'https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png'
+      const photoProfile =
+        'https://hpsnf.com/wp-content/uploads/2021/04/avatar.jpg'
 
       const { firstName, lastName, email, password } = req.body
 
@@ -38,7 +39,15 @@ const userControllers = {
         throw { type: 'hasdata', message: 'email already registered' }
       }
 
-      const request = await userModels.modelUserRegister({ firstName, lastName, role, email, userUuid, password, photoProfile })
+      const request = await userModels.modelUserRegister({
+        firstName,
+        lastName,
+        role,
+        email,
+        userUuid,
+        password,
+        photoProfile
+      })
 
       res.status(201).send({
         status: 201,
@@ -54,7 +63,8 @@ const userControllers = {
       } else if (
         error.message.includes('is not allowed to be empty') ||
         error.message.includes('must be a valid email') ||
-        error.message.includes('length must be less than or equal')) {
+        error.message.includes('length must be less than or equal')
+      ) {
         res.status(422).send({
           status: false,
           message: error.message
@@ -82,7 +92,10 @@ const userControllers = {
       const checkMail = await userModels.modelCheckEmail(email)
 
       if (checkMail.length === 0) {
-        throw { type: 'nodata', message: 'email not found, please register first' }
+        throw {
+          type: 'nodata',
+          message: 'email not found, please register first'
+        }
       }
 
       const isPassMatch = bcrypt.compareSync(password, checkMail[0].password)
@@ -91,12 +104,13 @@ const userControllers = {
         throw { message: 'wrong password' }
       }
 
+      // console.log(`Uid is : ${checkMail[0].user_uid}`)
+
       const data = {
         user_uid: checkMail[0].user_uid,
         first_name: checkMail[0].first_name,
         last_name: checkMail[0].last_name,
         photo_profile: checkMail[0].photo_profile
-
       }
       const token = jwt.sign(data, process.env.APP_SECRET_TOKEN)
       res.status(200).send({
@@ -118,7 +132,8 @@ const userControllers = {
         })
       } else if (
         error.message.includes('is not allowed to be empty') ||
-        error.message.includes('must be a valid email')) {
+        error.message.includes('must be a valid email')
+      ) {
         res.status(422).send({
           status: false,
           message: error.message
@@ -126,15 +141,22 @@ const userControllers = {
       }
     }
   },
-  _userLoginProfile: async (req, res) => {
-    const token = req.headers.authorization.slice(7)
-    const decoded = jwt.verify(token, process.env.APP_SECRET_TOKEN)
-    const request = await userModels.modelDetailUser(decoded)
-    res.status(200).send({
-      status: true,
-      message: 'ok',
-      data: request
-    })
+  _userProfile: async (req, res) => {
+    try {
+      const token = req.headers.authorization.slice(7)
+      const decoded = jwt.verify(token, process.env.APP_SECRET_TOKEN)
+      const request = await userModels.modelDetailUser(decoded)
+      res.status(200).send({
+        success: true,
+        message: 'ok',
+        data: request
+      })
+    } catch (error) {
+      res.status(403).send({
+        success: failed,
+        message: 'Forbihiden'
+      })
+    }
   }
 }
 
