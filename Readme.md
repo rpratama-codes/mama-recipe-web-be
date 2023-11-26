@@ -2,6 +2,8 @@
 
 Share recipe share a love.
 Tomato is a kitchen social media, save, sharing recipe with other.
+Tomato is a fork from mama recipe. it's like relation redhat linux and redora linux :)
+It's a learning base project from Pijarcamp.
 
 ## Feature
 
