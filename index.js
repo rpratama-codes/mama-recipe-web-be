@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
+  require('dotenv').config({ path: './.env.local' })
 }
 const bodyParser = require('body-parser')
 const express = require('express')
