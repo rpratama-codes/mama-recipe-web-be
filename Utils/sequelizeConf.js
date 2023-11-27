@@ -1,13 +1,14 @@
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config({ path: '../.env.local' })
+  require('dotenv').config({ path: __dirname + '/./../.env.local' })
 }
 
 module.exports = {
   development: {
-    username: 'postgres',
-    password: 'postgres',
-    database: 'tomato_db',
-    host: 'localhost',
+    username: process.env.DB_USER_LOCAL,
+    password: process.env.DB_PASS_LOCAL,
+    database: process.env.DB_NAME_LOCAL,
+    host: process.env.DB_HOST_LOCAL,
+    port: process.env.DB_PORT_LOCAL,
     dialect: 'postgres'
   },
   test: {
