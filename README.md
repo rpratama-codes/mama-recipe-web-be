@@ -1,62 +1,82 @@
-# Mama Recipes Web Apps
-<p align="center">
-  <img src="https://i.pinimg.com/originals/db/e2/1e/dbe21e079ab9fc87b282f5d42d20241a.png" align="right" height="220" width="210" />
-</p>
+# Backend Recipes Apps (Mama Recipe and Tomato )
 
-# decription
-"Mama Recipe" is a culinary application that aims to help users find the best food recipes from all over Indonesia. This app offers thousands of recipes, cooking guides, and more. We want to provide an easier and more enjoyable cooking experience.
+![badge](./Docs/Pictures/badge-mama-recipe-x-tomato.png)  
+This is a repository for Mama Recipe and Tomato, both are same application while Tomato is a fork from Mama Recipe Project. This Project is about a recipe applicaion that has a service like adding,save,favorite,like recipe, and other.
 
-# contributor
-@arsyad12 @rizqikazukun @muhwanto0123
+Check this link to view the Mama Recipe Web : <https://recipes-web-fe.vercel.app/>
 
-# setup database
-```
-const postgres = require('postgres') // import postgres
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
+## Table of content
+- [Backend Recipes Apps (Mama Recipe and Tomato )](#backend-recipes-apps-mama-recipe-and-tomato-)
+	- [Table of content](#table-of-content)
+	- [How to run](#how-to-run)
+		- [Environment](#environment)
+	- [Contributor](#contributor)
+	- [Screenshoots](#screenshoots)
+		- [Home](#home)
+		- [Recipe Detail](#recipe-detail)
+		- [Recipe Login Register](#recipe-login-register)
 
-const sql = postgres({
+## How to run  
 
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
-  pass: process.env.DB_PASS
+On Local :
 
-})
+1. Clone this repository ``https://github.com/Team-A-Pijarcamp-Batch-15/receipes-web-be``
+2. Install the dependencies with command  ``npm install``  
+3. Setup the environment variable bellow.
+4. Run with command ``npm run start`` or for the next using ``npm run dev``
 
-module.exports = sql
-```
-# setup dependencies
-```
-    npm i bcrypt
-    npm i body-parser
-    npm i cors
-    npm i dotenv
-    npm i express
-    npm i helmet
-    npm i joi
-    npm i jsonwebtoken
-    npm i postgres
-    npm i uuid
-```
-# setup env
-```
+note that npm run start will also running the migration database, so please configure the environment properly.
+
+### Environment
+
+Please use ``.env.local`` for local environment setting for development. Fill related configuration below before running the app.
+
+```bash
+# ADD APP Environment Setting
+NODE_ENV=
+APP_HOST=
+PORT=
+
+# Fill with generated SHA1 hash for JWT Secret
+APP_SECRET_TOKEN=
+
+# ADD FE_URI for Spesific CORS Setting
+FE_URI=
+
+# CONFIG DB PRODUCTION
 DB_HOST=
 DB_USER=
 DB_PASS=
 DB_NAME=
 DB_PORT=
-FE_URI=
-APP_SECRET_TOKEN=""
-APP_PORT=
-APP_HOST=
-```
-# how to run
-```
-npm run start
-```
-# API collection
 
-[https://documenter.getpostman.com/view/30080582/2s9YXfc3aV]
+# CONFIG FOR LOCAL
+DB_HOST_LOCAL=
+DB_USER_LOCAL=
+DB_PASS_LOCAL=
+DB_NAME_LOCAL=
+DB_PORT_LOCAL=
+
+```
+
+## Contributor
+
+- @arsyad12
+- @rizqikazukun
+- @muhwanto0123
+
+## Screenshoots
+
+### Home
+
+![badge](./Docs/Pictures/recipes-web-fe.vercel.app_home.png)  
+
+### Recipe Detail
+
+![badge](./Docs/Pictures/recipes-web-fe.vercel.app_detail.png)
+
+### Recipe Login Register
+
+Note that login register has same design.
+
+![badge](./Docs/Pictures/recipes-web-fe.vercel.app_login.png)
