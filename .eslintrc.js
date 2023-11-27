@@ -4,15 +4,12 @@ module.exports = {
     es2021: true,
     node: true
   },
-  extends: 'standard',
   overrides: [
     {
       env: {
         node: true
       },
-      files: [
-        '.eslintrc.{js,cjs}'
-      ],
+      files: ['.eslintrc.{js,cjs}'],
       parserOptions: {
         sourceType: 'script'
       }
@@ -21,6 +18,19 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest'
   },
+  extends: ['prettier'],
+  plugins: ['prettier'],
   rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        semi: false,
+        singleQuote: true,
+        trailingComma: 'none',
+        endOfLine: 'auto'
+      }
+    ],
+    'arrow-body-style': 'off',
+    'prefer-arrow-callback': 'off'
   }
 }

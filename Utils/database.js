@@ -1,6 +1,6 @@
 const postgres = require('postgres') // import postgres
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
+  require('dotenv').config({ path: '../.env.local' })
 }
 
 const sql = postgres({

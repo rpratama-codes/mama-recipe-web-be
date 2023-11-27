@@ -8,16 +8,39 @@ const userModels = {
     return request
   },
   modelUserRegister: async (payload) => {
-    const { firstName, lastName, role, email, userUuid, password, photoProfile } = payload
+    const {
+      firstName,
+      lastName,
+      role,
+      email,
+      userUuid,
+      password,
+      photoProfile
+    } = payload
     const saltRounds = 3
     const salt = bcrypt.genSaltSync(saltRounds)
     const hash = bcrypt.hashSync(password, salt)
-    const request = await database`INSERT INTO users(first_name, last_name, role, email, user_uid, password, photo_profile)
-      VALUES (${firstName}, ${lastName},${role}, ${email},${userUuid},${hash},${photoProfile}) returning user_uid;`
+    const insertValue = [
+      {
+        first_name: firstName,
+        last_name: lastName,
+        role,
+        user_uid: userUuid,
+        email,
+        photo_profile: photoProfile,
+        password: hash,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ]
+    const request = await database`INSERT INTO users ${database(
+      insertValue
+    )} returning user_uid;`
     return request
   },
   modelDetailUser: async (decoded) => {
-    const request = await database`SELECT first_name,last_name,email,photo_profile FROM users WHERE id = ${decoded.id}`
+    const request =
+      await database` SELECT first_name,last_name,phone_number,email,photo_profile FROM users WHERE user_uid = ${decoded.user_uid}`
     return request
   }
 }

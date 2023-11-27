@@ -7,7 +7,19 @@ const commentsModelsDetails = {
   },
   addComment: async (payload) => {
     const { recipeUid, userUid, message } = payload
-    const request = await database`INSERT INTO comments (recipe_uid, user_uid, message) VALUES (${recipeUid}, ${userUid},${message}) returning id`
+
+    const insertValue = [
+      {
+        user_uid: userUid,
+        recipe_uid: recipeUid,
+        message,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ]
+    const request = await database`INSERT INTO comments ${database(
+      insertValue
+    )} returning id`
     return request
   },
   getCommentByUID: async (recipeUid) => {

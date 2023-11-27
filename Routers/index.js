@@ -19,13 +19,19 @@ router.get('/', (req, res) => {
 })
 // receipes endpoint
 router.get('/recipes/allRecipes', receipesControllerDetails._getAllReceipes)
-router.get('/recipes/:receiptUid', receipesControllerDetails._getRecipesByParams)
+router.get(
+  '/recipes/:receiptUid',
+  receipesControllerDetails._getRecipesByParams
+)
 
 // comment endpoint
 router.get('/comments', commentsControllerDetails._getAllComments)
 router.post('/comments', commentsControllerDetails._addComment)
 router.post('/recipes/detail', receipesControllerDetails._getRecipesByTitle)
-router.get('/recipes/:recipeUid/detail/comments', commentsControllerDetails._getCommentByUID)
+router.get(
+  '/recipes/:recipeUid/detail/comments',
+  commentsControllerDetails._getCommentByUID
+)
 
 // recipe Popular endpoint
 router.get('/home/popular', receipeHomeController.getPopulareRecipe_Controller)
@@ -35,7 +41,11 @@ router.get('/home/new', receipeHomeController.getNewRecipe_Controller)
 // user endpoint
 router.post('/user/register', userControllers._userRegister)
 router.post('/user/login', userControllers._userLogin)
-router.post('/user/login/profile', checkJwt.jwtTokenDecode, userControllers._userLoginProfile)
+router.get(
+  '/user/profile',
+  checkJwt.jwtTokenDecode,
+  userControllers._userProfile
+)
 
 //
 router.get('/user/uuid', userUid.usserUid)
