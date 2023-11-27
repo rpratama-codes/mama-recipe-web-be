@@ -15,7 +15,7 @@ const recipeHomeModel = {
   },
   _getNewRecipe: async () => {
     const request =
-      await database`SELECT * FROM recipes ORDER BY created_at DESC LIMIT 1`
+      await database`SELECT * FROM recipes ORDER BY "createdAt" DESC LIMIT 1`
     console.log(`New Recipe dapat ${request.length}`)
 
     return request
