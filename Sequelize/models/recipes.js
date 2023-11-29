@@ -20,7 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       recipes_uid: DataTypes.UUID,
       ispopular: DataTypes.BOOLEAN,
       ingredients: DataTypes.JSONB,
-      sort_desc: DataTypes.TEXT
+      sort_desc: DataTypes.TEXT,
+      category: DataTypes.JSONB,
+      rating: DataTypes.FLOAT,
+      created_by: DataTypes.UUID
     },
     {
       sequelize,
