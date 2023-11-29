@@ -1,4 +1,5 @@
 const receipesModelsDetails = require('../Models/receipesModelDetails')
+const { users } = require('../Sequelize/models')
 
 const receipesControllerDetails = {
 
@@ -21,11 +22,17 @@ const receipesControllerDetails = {
   _getRecipesByParams: async (req, res) => {
     try {
       const { receiptUid } = req.params
-      const request = await receipesModelsDetails.getRecipesByParams(receiptUid)
+      const requestRecipe =
+        await receipesModelsDetails.getRecipesByParams(receiptUid)
+      const requestUser = await users.findOne({
+        attributes: ['first_name', 'last_name'],
+        where: { user_uid: requestRecipe[0].created_by }
+      })
+      const data = [{ ...requestRecipe[0], ...requestUser.dataValues }]
       res.status(200).json({
         status: 200,
         message: 'ok',
-        data: request
+        data
       })
     } catch (error) {
       res.status(502).json({

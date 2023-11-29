@@ -12,7 +12,7 @@ const receipesModelsDetails = {
 
   getRecipesByParams: async (receiptUid) => {
     const request =
-      await database`SELECT * FROM recipes WHERE receipt_uid = ${receiptUid}`
+      await database`SELECT * FROM recipes WHERE recipes_uid = ${receiptUid}`
     return request
   },
 
