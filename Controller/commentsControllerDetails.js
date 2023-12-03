@@ -35,10 +35,8 @@ const commentsControllersDetails = {
   _addComment: async (req, res) => {
     try {
       const schema = Joi.object({
-        body: Joi.object({
-          recipeUid: Joi.string().uuid().required(),
-          message: Joi.string().min(2).max(150).required()
-        })
+        recipeUid: Joi.string().uuid().required(),
+        message: Joi.string().min(2).max(150).required()
       })
 
       const validateOptions = {
@@ -47,7 +45,7 @@ const commentsControllersDetails = {
         stripUnknown: true // remove unknown props
       }
 
-      await schema.validateAsync(req, validateOptions)
+      await schema.validateAsync(req.body, validateOptions)
 
       const { recipeUid, message } = req.body
       const { authorization } = req.headers
