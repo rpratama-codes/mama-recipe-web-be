@@ -113,9 +113,9 @@ const userControllers = {
         photo_profile: checkMail[0].photo_profile
       }
       const token = jwt.sign(data, process.env.APP_SECRET_TOKEN)
-      res.status(200).send({
+      res.status(200).json({
         status: true,
-        message: 'Login Succes !',
+        message: 'Login Success',
         data,
         token
       })
@@ -123,20 +123,25 @@ const userControllers = {
       if (error.type === 'nodata') {
         res.status(404).json({
           status: false,
-          massage: 'email not found, please register first'
+          massage: 'User Not Found'
         })
       } else if (error.message === 'wrong password') {
-        res.status(401).send({
+        res.status(401).json({
           status: false,
-          message: 'Wrong Password !!!'
+          message: 'Wrong Password'
         })
       } else if (
         error.message.includes('is not allowed to be empty') ||
         error.message.includes('must be a valid email')
       ) {
-        res.status(422).send({
+        res.status(422).json({
           status: false,
           message: error.message
+        })
+      } else {
+        res.status(500).json({
+          status: false,
+          message: 'Internal App Error'
         })
       }
     }
