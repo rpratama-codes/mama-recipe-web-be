@@ -10,6 +10,7 @@ const userControllers = require('../Controller/userController')
 // midleware
 const checkJwt = require('../Middleware/checkJWT')
 const userUid = require('../Middleware/userUID')
+const recipesNewController = require('../Controller/recipesSearchController')
 //
 router.get('/', (req, res) => {
   return res.status(200).json({
@@ -18,6 +19,7 @@ router.get('/', (req, res) => {
   })
 })
 // receipes endpoint
+router.get('/recipes/search', recipesNewController._search)
 router.get('/recipes/allRecipes', receipesControllerDetails._getAllReceipes)
 router.get(
   '/recipes/:receiptUid',
