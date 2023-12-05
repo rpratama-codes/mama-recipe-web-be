@@ -45,6 +45,11 @@ router.post('/user/register', userControllers._userRegister)
 router.post('/user/login', userControllers._userLogin)
 router.get('/user/profile', Auth.verify, userControllers._userProfile)
 router.put('/user/profile/edit', Auth.verify, userControllers._editProfile)
+router.put(
+  '/user/profile/update-password',
+  Auth.verify,
+  userControllers._changePassword
+)
 
 //
 router.get('/user/uuid', userUid.usserUid)
