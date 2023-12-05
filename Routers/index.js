@@ -8,9 +8,9 @@ const commentsControllerDetails = require('../Controller/commentsControllerDetai
 const userControllers = require('../Controller/userController')
 
 // midleware
-const checkJwt = require('../Middleware/checkJWT')
 const userUid = require('../Middleware/userUID')
 const recipesNewController = require('../Controller/recipesSearchController')
+const Auth = require('../Middleware/Auth')
 //
 router.get('/', (req, res) => {
   return res.status(200).json({
@@ -43,11 +43,8 @@ router.get('/home/new', receipeHomeController.getNewRecipe_Controller)
 // user endpoint
 router.post('/user/register', userControllers._userRegister)
 router.post('/user/login', userControllers._userLogin)
-router.get(
-  '/user/profile',
-  checkJwt.jwtTokenDecode,
-  userControllers._userProfile
-)
+router.get('/user/profile', Auth.verify, userControllers._userProfile)
+router.put('/user/profile/edit', Auth.verify, userControllers._editProfile)
 
 //
 router.get('/user/uuid', userUid.usserUid)

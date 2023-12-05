@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken')
 // import bcrypt for compare password from user with database
 const bcrypt = require('bcrypt')
 // import joi untuk validasi
-const Joi = require('joi').extend(require('@joi/date'))
+const Joi = require('joi')
+const { users } = require('../Sequelize/models')
 
 const userControllers = {
   _userRegister: async (req, res) => {
@@ -161,6 +162,52 @@ const userControllers = {
         success: failed,
         message: 'Forbihiden'
       })
+    }
+  },
+  _editProfile: async (req, res) => {
+    try {
+      const schema = Joi.object({
+        first_name: Joi.string().required(),
+        last_name: Joi.string().required(),
+        phone_number: Joi.string().required()
+      })
+
+      await schema.validateAsync(req.body)
+
+      const { first_name, last_name, phone_number } = req.body
+      const { user_uid } = req.locals.user
+
+      await users.update(
+        { first_name, last_name, phone_number },
+        {
+          where: {
+            user_uid
+          }
+        }
+      )
+
+      res.status(200).json({
+        status: 200,
+        message: 'profile updated'
+      })
+    } catch (error) {
+      // console.log(error)
+      if (
+        error.message.includes('is not allowed to be empty') ||
+        error.message.includes('must be a valid email') ||
+        error.message.includes('is required') ||
+        error.message.includes('must be a string')
+      ) {
+        res.status(422).json({
+          status: 422,
+          message: String(error.message).replaceAll('"', "'")
+        })
+      } else {
+        res.status(500).json({
+          status: 500,
+          message: 'internal application error'
+        })
+      }
     }
   }
 }
