@@ -6,18 +6,18 @@ const receipeHomeController = require('../Controller/recipeHomeController')
 const receipesControllerDetails = require('../Controller/receipesControllerDetails')
 const commentsControllerDetails = require('../Controller/commentsControllerDetails')
 const userControllers = require('../Controller/userController')
+const recipesNewController = require('../Controller/recipesSearchController')
 
 // midleware
-const userUid = require('../Middleware/userUID')
-const recipesNewController = require('../Controller/recipesSearchController')
 const Auth = require('../Middleware/Auth')
-//
+
 router.get('/', (req, res) => {
   return res.status(200).json({
     success: true,
     message: 'api running well'
   })
 })
+
 // receipes endpoint
 router.get('/recipes/search', recipesNewController._search)
 router.get('/recipes/allRecipes', receipesControllerDetails._getAllReceipes)
@@ -50,8 +50,5 @@ router.put(
   Auth.verify,
   userControllers._changePassword
 )
-
-//
-router.get('/user/uuid', userUid.usserUid)
 
 module.exports = router
