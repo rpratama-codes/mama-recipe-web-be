@@ -61,7 +61,7 @@ FE_URI=
 
 
 #
-# The Idea to make different is to make seamlesly switching db config on local development.
+# The Idea to make different DB config is to make seamlesly switching db config on local development.
 # If you want to use cloud database in local fill NODE_ENV with production or leave it empty.
 #
 
