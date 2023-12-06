@@ -226,8 +226,12 @@ const userControllers = {
       const { password } = req.body
       const { user_uid } = req.locals.user
 
+      const saltRounds = 3
+      const salt = bcrypt.genSaltSync(saltRounds)
+      const hash = bcrypt.hashSync(password, salt)
+
       await users.update(
-        { password },
+        { password: hash },
         {
           where: {
             user_uid
