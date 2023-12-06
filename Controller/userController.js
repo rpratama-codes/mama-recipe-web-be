@@ -209,6 +209,51 @@ const userControllers = {
         })
       }
     }
+  },
+  _changePassword: async (req, res) => {
+    try {
+      const schema = Joi.object({
+        password: Joi.string().min(8).max(30).required()
+      })
+
+      await schema.validateAsync(req.body)
+
+      const { password } = req.body
+      const { user_uid } = req.locals.user
+
+      await users.update(
+        { password },
+        {
+          where: {
+            user_uid
+          }
+        }
+      )
+
+      res.status(200).json({
+        status: 200,
+        message: 'password changed'
+      })
+    } catch (error) {
+      // console.log(error)
+      if (
+        error.message.includes('is not allowed to be empty') ||
+        error.message.includes('is required') ||
+        error.message.includes('must be a string') ||
+        error.message.includes('length must be at least') ||
+        error.message.includes('length must be less than or equal to')
+      ) {
+        res.status(422).json({
+          status: 422,
+          message: String(error.message).replaceAll('"', "'")
+        })
+      } else {
+        res.status(500).json({
+          status: 500,
+          message: 'internal application error'
+        })
+      }
+    }
   }
 }
 

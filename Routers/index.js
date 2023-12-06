@@ -6,18 +6,18 @@ const receipeHomeController = require('../Controller/recipeHomeController')
 const receipesControllerDetails = require('../Controller/receipesControllerDetails')
 const commentsControllerDetails = require('../Controller/commentsControllerDetails')
 const userControllers = require('../Controller/userController')
+const recipesNewController = require('../Controller/recipesSearchController')
 
 // midleware
-const userUid = require('../Middleware/userUID')
-const recipesNewController = require('../Controller/recipesSearchController')
 const Auth = require('../Middleware/Auth')
-//
+
 router.get('/', (req, res) => {
   return res.status(200).json({
     success: true,
     message: 'api running well'
   })
 })
+
 // receipes endpoint
 router.get('/recipes/search', recipesNewController._search)
 router.get('/recipes/allRecipes', receipesControllerDetails._getAllReceipes)
@@ -45,8 +45,10 @@ router.post('/user/register', userControllers._userRegister)
 router.post('/user/login', userControllers._userLogin)
 router.get('/user/profile', Auth.verify, userControllers._userProfile)
 router.put('/user/profile/edit', Auth.verify, userControllers._editProfile)
-
-//
-router.get('/user/uuid', userUid.usserUid)
+router.put(
+  '/user/profile/update-password',
+  Auth.verify,
+  userControllers._changePassword
+)
 
 module.exports = router
