@@ -11,4 +11,4 @@ cloudinary.config({
   secure: true
 })
 
-module.export = cloudinary
+module.exports = cloudinary

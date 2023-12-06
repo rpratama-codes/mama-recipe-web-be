@@ -1,6 +1,10 @@
 const express = require('express')
 const router = express.Router()
 
+const multer = require('multer')
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
+
 // controller
 const receipeHomeController = require('../Controller/recipeHomeController')
 const receipesControllerDetails = require('../Controller/receipesControllerDetails')
@@ -49,6 +53,12 @@ router.put(
   '/user/profile/update-password',
   Auth.verify,
   userControllers._changePassword
+)
+router.post(
+  '/user/profile/update-photo',
+  Auth.verify,
+  upload.single('user-photo'),
+  userControllers._changePhoto
 )
 
 module.exports = router
