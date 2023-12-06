@@ -269,20 +269,25 @@ const userControllers = {
       const { user_uid } = req.locals.user
       cloudinary.uploader
         .upload_stream({ folder: 'profile' }, async (error, result) => {
-          const update = await users.update(
-            { photo_profile: result.secure_url },
-            { where: { user_uid } }
-          )
-          if (update?.length === 1) {
+          if (result) {
+            await users.update(
+              { photo_profile: result.secure_url },
+              { where: { user_uid } }
+            )
             res.status(200).json({
               status: 200,
               message: 'photo changed'
+            })
+          } else if (error) {
+            res.status(error.http_code).json({
+              status: error.http_code,
+              message: error.message
             })
           } else {
             throw { status: 500 }
           }
         })
-        .end(req.file.buffer)
+        .end(req?.file?.buffer)
     } catch (error) {
       // console.log(error)
       res.status(500).json({

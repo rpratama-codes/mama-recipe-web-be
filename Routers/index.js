@@ -10,7 +10,7 @@ const receipeHomeController = require('../Controller/recipeHomeController')
 const receipesControllerDetails = require('../Controller/receipesControllerDetails')
 const commentsControllerDetails = require('../Controller/commentsControllerDetails')
 const userControllers = require('../Controller/userController')
-const recipesNewController = require('../Controller/recipesSearchController')
+const recipesNewController = require('../Controller/recipesNewController')
 
 // midleware
 const Auth = require('../Middleware/Auth')
@@ -24,6 +24,12 @@ router.get('/', (req, res) => {
 
 // receipes endpoint
 router.get('/recipes/search', recipesNewController._search)
+router.post(
+  '/recipes/add',
+  Auth.verify,
+  // upload.single('recipe-image'),
+  recipesNewController._add
+)
 router.get('/recipes/allRecipes', receipesControllerDetails._getAllReceipes)
 router.get(
   '/recipes/:receiptUid',
