@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt')
 // import joi untuk validasi
 const Joi = require('joi')
 const { users } = require('../Sequelize/models')
+const cloudinary = require('../Utils/cloudinary')
 
 const userControllers = {
   _userRegister: async (req, res) => {
@@ -149,18 +150,22 @@ const userControllers = {
   },
   _userProfile: async (req, res) => {
     try {
-      const token = req.headers.authorization.slice(7)
-      const decoded = jwt.verify(token, process.env.APP_SECRET_TOKEN)
-      const request = await userModels.modelDetailUser(decoded)
+      const { user_uid } = req.locals.user
+
+      const detail = await users.findOne({ where: { user_uid } })
+      const { first_name, last_name, phone_number, email, photo_profile } =
+        detail
+
       res.status(200).send({
-        success: true,
+        status: 200,
         message: 'ok',
-        data: request
+        data: { first_name, last_name, phone_number, email, photo_profile }
       })
     } catch (error) {
-      res.status(403).send({
-        success: failed,
-        message: 'Forbihiden'
+      // console.log(error)
+      res.status(500).send({
+        ststus: 500,
+        message: 'internal application error'
       })
     }
   },
@@ -253,6 +258,33 @@ const userControllers = {
           message: 'internal application error'
         })
       }
+    }
+  },
+  _changePhoto: async (req, res) => {
+    try {
+      const { user_uid } = req.locals.user
+      cloudinary.uploader
+        .upload_stream({ folder: 'profile' }, async (error, result) => {
+          const update = await users.update(
+            { photo_profile: result.secure_url },
+            { where: { user_uid } }
+          )
+          if (update?.length === 1) {
+            res.status(200).json({
+              status: 200,
+              message: 'photo changed'
+            })
+          } else {
+            throw { status: 500 }
+          }
+        })
+        .end(req.file.buffer)
+    } catch (error) {
+      // console.log(error)
+      res.status(500).json({
+        status: 500,
+        message: 'internal application error'
+      })
     }
   }
 }
