@@ -31,7 +31,13 @@ class recipesNewController {
         }
       })
     } catch (error) {
-      if (error.status === 404) {
+      // console.log(error)
+      if (error.message.includes('is not allowed to be empty')) {
+        res.status(422).json({
+          status: 422,
+          message: String(error.message).replaceAll('"', "'")
+        })
+      } else if (error.status === 404) {
         res.status(404).json({
           status: 404,
           message: error.message
