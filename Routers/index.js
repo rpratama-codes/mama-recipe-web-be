@@ -23,11 +23,12 @@ router.get('/', (req, res) => {
 })
 
 // receipes endpoint
+// router.post('/test', upload.single('user-photo'), recipesNewController._test)
 router.get('/recipes/search', recipesNewController._search)
 router.post(
   '/recipes/add',
   Auth.verify,
-  // upload.single('recipe-image'),
+  upload.single('recipe-image'),
   recipesNewController._add
 )
 router.get('/recipes/allRecipes', receipesControllerDetails._getAllReceipes)
