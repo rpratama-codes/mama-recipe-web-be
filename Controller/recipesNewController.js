@@ -2,6 +2,7 @@ const { Op } = require('sequelize')
 const { recipes } = require('../Sequelize/models')
 const Joi = require('joi')
 const { v4: uuidv4 } = require('uuid')
+const cloudinary = require('../Utils/cloudinary')
 
 class recipesNewController {
   static async _search(req, res) {
@@ -53,21 +54,21 @@ class recipesNewController {
 
   static async _add(req, res) {
     try {
+      const data = JSON.parse(req.body.data)
+      const { user_uid } = req.locals.user
+
       const schema = Joi.object({
         title: Joi.string().min(5).max(30).required(),
         description: Joi.string(),
         ingredients: Joi.array().items(Joi.string()),
         steps: Joi.array().items(Joi.string()),
         video: Joi.string().uri(),
-        category: Joi.array().items(Joi.string()),
-        image: Joi.string().uri()
+        category: Joi.array().items(Joi.string())
       })
 
-      await schema.validateAsync(req.body)
+      await schema.validateAsync(data)
 
-      const { user_uid } = req.locals.user
-      const { title, description, ingredients, steps, video, category, image } =
-        req.body
+      const { title, description, ingredients, steps, video } = data
       const uuid = uuidv4()
 
       const ingredientsObj = {
@@ -77,25 +78,41 @@ class recipesNewController {
         steps
       }
 
-      await recipes.create({
-        title,
-        status: 'public',
-        video_url: video,
-        recipes_uid: uuid,
-        ingredients: ingredientsObj,
-        sort_desc: description,
-        rating: 4.7,
-        category,
-        created_by: user_uid,
-        image
-      })
+      cloudinary.uploader
+        .upload_stream({ folder: 'recipe' }, async (error, result) => {
+          if (result) {
+            await recipes.create({
+              title,
+              status: 'public',
+              video_url: video,
+              recipes_uid: uuid,
+              ingredients: ingredientsObj,
+              sort_desc: description,
+              rating: 4.7,
+              category: ['salty'],
+              created_by: user_uid,
+              image: result.secure_url
+            })
 
-      res.status(201).json({
-        status: 201,
-        message: 'recipe added'
-      })
+            res.status(201).json({
+              status: 201,
+              message: 'recipe added'
+            })
+          } else if (error) {
+            res.status(error.http_code).json({
+              status: error.http_code,
+              message: error.message
+            })
+          } else {
+            res.status(500).json({
+              status: 500,
+              message: 'internal application error'
+            })
+          }
+        })
+        .end(req?.file?.buffer)
     } catch (error) {
-      // console.log(error)
+      console.log(error)
       if (
         error.message.includes('must be a valid uri') ||
         error.message.includes('must be a string') ||
