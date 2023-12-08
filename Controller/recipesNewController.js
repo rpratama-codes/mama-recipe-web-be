@@ -60,8 +60,8 @@ class recipesNewController {
       const schema = Joi.object({
         title: Joi.string().min(5).max(30).required(),
         description: Joi.string(),
-        ingredients: Joi.array().items(Joi.string()),
-        steps: Joi.array().items(Joi.string()),
+        ingredients: Joi.array().items(Joi.string().allow(null).allow('')),
+        steps: Joi.array().items(Joi.string().allow(null).allow('')),
         video: Joi.string().uri(),
         category: Joi.array().items(Joi.string())
       })
