@@ -95,14 +95,14 @@ CLOUDINARY_API_SECRET=
 
 ### Home
 
-![badge](./Docs/Pictures/recipes-web-fe.vercel.app_home.png)  
+![badge](./docs/Pictures/recipes-web-fe.vercel.app_home.png)  
 
 ### Recipe Detail
 
-![badge](./Docs/Pictures/recipes-web-fe.vercel.app_detail.png)
+![badge](./docs/Pictures/recipes-web-fe.vercel.app_detail.png)
 
 ### Recipe Login Register
 
 Note that login register has same design.
 
-![badge](./Docs/Pictures/recipes-web-fe.vercel.app_login.png)
+![badge](./docs/Pictures/recipes-web-fe.vercel.app_login.png)
