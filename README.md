@@ -1,6 +1,6 @@
 # Backend Recipes Apps (Mama Recipe and Tomato )
 
-![badge](./Docs/Pictures/badge-mama-recipe-x-tomato.png)  
+![badge](./docs/Pictures/badge-mama-recipe-x-tomato.png)  
 This is a repository for Mama Recipe and Tomato, both are same application while Tomato is a fork from Mama Recipe Project. This Project is about a recipe applicaion that has a service like adding,save,favorite,like recipe, and other.
 
 Check this link to view the Mama Recipe Web : <https://recipes-web-fe.vercel.app/>
@@ -58,7 +58,6 @@ APP_SECRET_TOKEN=
 
 # ADD FE_URI for Spesific CORS Setting
 FE_URI=
-
 
 #
 # The Idea to make different DB config is to make seamlesly switching db config on local development.
