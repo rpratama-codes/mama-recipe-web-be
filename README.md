@@ -1,21 +1,13 @@
-# Backend Recipes Apps (Mama Recipe and Tomato )
+# Mama Recipe x Orenji -  Backend
 
 ![badge](./docs/Pictures/badge-mama-recipe-x-tomato.png)  
 This is a repository for Mama Recipe and Tomato, both are same application while Tomato is a fork from Mama Recipe Project. This Project is about a recipe applicaion that has a service like adding,save,favorite,like recipe, and other.
 
+Developer :
+
+> ![developer](https://contrib.rocks/image?repo=Team-A-Pijarcamp-Batch-15/receipes-web-be&anon=false)
+
 Check this link to view the Mama Recipe Web : <https://recipes-web-fe.vercel.app/>
-
-## Table of content
-
-- [Backend Recipes Apps (Mama Recipe and Tomato )](#backend-recipes-apps-mama-recipe-and-tomato-)
-	- [Table of content](#table-of-content)
-	- [How to run](#how-to-run)
-	- [Environment](#environment)
-	- [Contributor](#contributor)
-	- [Screenshoots](#screenshoots)
-		- [Home](#home)
-		- [Recipe Detail](#recipe-detail)
-		- [Recipe Login Register](#recipe-login-register)
 
 ## How to run  
 
@@ -35,6 +27,7 @@ Use environment name ``.env.local`` for local development.
 Fill related configuration below before running the app.
 
 ```bash
+
 #
 # ADD APP Environment Setting
 # Fill NODE_ENV if you want to use cloud database in local
@@ -60,7 +53,7 @@ APP_SECRET_TOKEN=
 FE_URI=
 
 #
-# The Idea to make different DB config is to make seamlesly switching db config on local development.
+# The Idea to make different DB config is to make seamlesly switching between db config on local and development.
 # If you want to use cloud database in local fill NODE_ENV with production or leave it empty.
 #
 
@@ -83,13 +76,13 @@ CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
 
+# SMTP Service 
+# This app using gmail as mail service provider
+# need to modify the ./src/Utils/smtp.js if you want to change mail service provider
+GOOGLE_EMAIL=
+GOOGLE_APP_PASSWORD=
+
 ```
-
-## Contributor
-
-- @arsyad12
-- @rizqikazukun
-- @muhwanto0123
 
 ## Screenshoots
 
