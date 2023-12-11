@@ -125,6 +125,19 @@ const userControllers = {
         }
       }
 
+      const verificationCheck = await users.findAll({
+        where: {
+          verified: true,
+          email
+        }
+      })
+
+      if (verificationCheck.length === 0) {
+        throw {
+          message: 'Please verify email first, or resend email vertification'
+        }
+      }
+
       const isPassMatch = bcrypt.compareSync(password, checkMail[0].password)
 
       if (!isPassMatch) {
@@ -152,6 +165,11 @@ const userControllers = {
           status: false,
           massage: 'User Not Found'
         })
+      } else if (error.message.includes('Please verify email first')) {
+        res.status(401).json({
+          status: false,
+          message: error.message
+        })
       } else if (error.message === 'wrong password') {
         res.status(401).json({
           status: false,
@@ -166,6 +184,7 @@ const userControllers = {
           message: error.message
         })
       } else {
+        // console.log(error)
         res.status(500).json({
           status: false,
           message: 'Internal App Error'
