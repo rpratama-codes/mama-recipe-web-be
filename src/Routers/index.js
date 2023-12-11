@@ -67,5 +67,6 @@ router.post(
   upload.single('user-photo'),
   userControllers._changePhoto
 )
+router.get('/verify', Auth.verifyEmail, userControllers._verifyEmail)
 
 module.exports = router
