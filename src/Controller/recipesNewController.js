@@ -7,33 +7,61 @@ const cloudinary = require('../Utils/cloudinary')
 class recipesNewController {
   static async _search(req, res) {
     try {
-      const { title } = req.query
+      let { title, amount, page, sortBy, sort } = req.query
 
-      const schema = Joi.string()
-      await schema.validateAsync(title)
+      const schema = Joi.object({
+        title: Joi.string().allow(''),
+        amount: Joi.number().min(1).max(10),
+        page: Joi.number().min(1).max(10),
+        sortBy: Joi.string().valid('title', 'latest'),
+        sort: Joi.string().valid('asc', 'desc')
+      })
 
-      const search = await recipes.findAll({
+      await schema.validateAsync(req.query)
+
+      const limit = !amount ? 6 : amount
+      const offset = !page ? 0 : limit * (page - 1)
+      sortBy = !sortBy ? 'title' : sortBy
+      sort = !sort ? 'asc' : sort
+      title = !title ? '%' : title
+
+      const search = await recipes.findAndCountAll({
         where: {
           title: {
             [Op.iLike]: `%${title}%`
           }
-        }
+        },
+        limit,
+        offset,
+        order: [[sortBy, sort]]
       })
 
-      if (search.length === 0) {
+      if (search.rows.length === 0) {
         throw { status: 404, message: 'No Recipe Found' }
       }
 
       res.status(200).json({
         status: 200,
         message: 'ok',
+        pagination: {
+          page: Number(page) || 1,
+          'page-data': search.rows.length,
+          'page-length': Math.ceil(search.count / limit),
+          'data-total': search.count
+        },
         data: {
-          search
+          search: search.rows
         }
       })
     } catch (error) {
       // console.log(error)
-      if (error.message.includes('is not allowed to be empty')) {
+      if (
+        error.message.includes('is not allowed to be empty') ||
+        error.message.includes('is not allowed') ||
+        error.message.includes('must be one of') ||
+        error.message.includes('must be greater than or equal to') ||
+        error.message.includes('must be less than or equal to')
+      ) {
         res.status(422).json({
           status: 422,
           message: String(error.message).replaceAll('"', "'")
