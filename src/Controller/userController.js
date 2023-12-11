@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt')
 const Joi = require('joi')
 const { users } = require('../Sequelize/models')
 const cloudinary = require('../Utils/cloudinary')
+const transporter = require('../Utils/smtp')
 
 const userControllers = {
   _userRegister: async (req, res) => {
@@ -49,6 +50,30 @@ const userControllers = {
         userUuid,
         password,
         photoProfile
+      })
+
+      const token = jwt.sign(
+        {
+          user_uid: userUuid,
+          role: 'verify'
+        },
+        process.env.APP_SECRET_TOKEN,
+        { expiresIn: 10 * 60 }
+      )
+
+      await transporter.sendMail({
+        from: `"Orenji / Mama Recipe" <${process.env.GOOGLE_EMAIL}>`,
+        to: email,
+        subject: 'Email Verification',
+        html: `<h1>Registration success</h1>  
+              <hr/>
+              <p> Please <a href="${process.env.APP_URL}/verify?token=${token}">Verify Email</a></p>
+              <p> Verification valid for 10 Minute, after this please resend email verification</p>
+              <p> if link is can not be open, please copy pase verification link below</p>
+              <p> ${process.env.APP_URL}/verify?token=${token}</p>
+              <hr/>
+              <p>If it's not you, please ignore this message or send request data removal to this email</p>
+              `
       })
 
       res.status(201).send({
@@ -290,6 +315,30 @@ const userControllers = {
         .end(req?.file?.buffer)
     } catch (error) {
       // console.log(error)
+      res.status(500).json({
+        status: 500,
+        message: 'internal application error'
+      })
+    }
+  },
+  _verifyEmail: async (req, res) => {
+    try {
+      const { user_uid } = req.locals.user
+
+      await users.update(
+        { verified: true },
+        {
+          where: {
+            user_uid
+          }
+        }
+      )
+
+      res
+        .status(200)
+        .send('Email Verified Successfuly. You can close this tab.')
+    } catch (error) {
+      console.log(error)
       res.status(500).json({
         status: 500,
         message: 'internal application error'
