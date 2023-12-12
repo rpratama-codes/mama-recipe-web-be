@@ -24,7 +24,7 @@ const userControllers = {
 
       // default photo profile
       const photoProfile =
-        'https://hpsnf.com/wp-content/uploads/2021/04/avatar.jpg'
+        'https://res.cloudinary.com/dwptyupfa/image/upload/v1702351028/default/qypd8uufip0no3st2ukx.jpg'
 
       const { firstName, lastName, email, password, device_id } = req.body
 
