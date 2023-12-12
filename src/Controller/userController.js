@@ -10,6 +10,7 @@ const Joi = require('joi')
 const { users } = require('../Sequelize/models')
 const cloudinary = require('../Utils/cloudinary')
 const transporter = require('../Utils/smtp')
+const { fcm, firestore } = require('../Utils/firebase')
 
 const userControllers = {
   _userRegister: async (req, res) => {
@@ -23,15 +24,16 @@ const userControllers = {
 
       // default photo profile
       const photoProfile =
-        'https://hpsnf.com/wp-content/uploads/2021/04/avatar.jpg'
+        'https://res.cloudinary.com/dwptyupfa/image/upload/v1702351028/default/qypd8uufip0no3st2ukx.jpg'
 
-      const { firstName, lastName, email, password } = req.body
+      const { firstName, lastName, email, password, device_id } = req.body
 
       const schema = Joi.object({
         firstName: Joi.string().min(1).max(20).required(),
         lastName: Joi.string().min(1).max(20).required(),
         email: Joi.string().email().required(),
-        password: Joi.string().required()
+        password: Joi.string().required(),
+        device_id: Joi.string().allow('').allow(null)
       })
 
       await schema.validateAsync(req.body)
@@ -75,6 +77,20 @@ const userControllers = {
               <p>If it's not you, please ignore this message or send request data removal to this email</p>
               `
       })
+
+      if (device_id) {
+        await firestore
+          .collection('devices')
+          .add({ user_uid: userUuid, device_id })
+
+        await fcm.send({
+          notification: {
+            title: 'Register Success',
+            body: 'Please check your email'
+          },
+          token: device_id
+        })
+      }
 
       res.status(201).send({
         status: 201,
@@ -343,6 +359,32 @@ const userControllers = {
   _verifyEmail: async (req, res) => {
     try {
       const { user_uid } = req.locals.user
+
+      const checkVertification = await users.findAll({
+        where: { user_uid, verified: false }
+      })
+
+      const getDeviceId = await firestore
+        .collection('devices')
+        .where('user_uid', '==', user_uid)
+        .get()
+
+      const extractDeviceId = getDeviceId.docs.map((doc) => doc.data())
+
+      if (!(extractDeviceId.length === 0)) {
+        await fcm.send({
+          notification: {
+            title: 'Email Verified',
+            body: 'Thankyou, Have a nice day!'
+          },
+          token: extractDeviceId[0].device_id
+        })
+      }
+
+      if (checkVertification.length === 0) {
+        res.status(403).send('Link is invalid, or you have been verified')
+        return
+      }
 
       await users.update(
         { verified: true },
