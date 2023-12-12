@@ -22,4 +22,7 @@ const config = {
 
 firebase.initializeApp(config)
 
-module.exports = firebase
+const firestore = firebase.firestore()
+const fcm = firebase.messaging()
+
+module.exports = { firestore, fcm }
