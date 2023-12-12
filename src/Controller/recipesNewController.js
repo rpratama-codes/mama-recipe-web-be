@@ -7,14 +7,16 @@ const cloudinary = require('../Utils/cloudinary')
 class recipesNewController {
   static async _search(req, res) {
     try {
-      let { title, amount, page, sortBy, sort } = req.query
+      let { title, amount, page, sortBy, sort, byMe, user_uid } = req.query
 
       const schema = Joi.object({
         title: Joi.string().allow(''),
         amount: Joi.number().min(1).max(10),
         page: Joi.number().min(1).max(10),
         sortBy: Joi.string().valid('title', 'latest'),
-        sort: Joi.string().valid('asc', 'desc')
+        sort: Joi.string().valid('asc', 'desc'),
+        byMe: Joi.string().valid('true', 'false'),
+        user_uid: Joi.string().guid({ version: 'uuidv4', separator: '-' })
       })
 
       await schema.validateAsync(req.query)
@@ -25,12 +27,29 @@ class recipesNewController {
       sort = !sort ? 'asc' : sort
       title = !title ? '%' : title
 
+      let where = {
+        title: {
+          [Op.iLike]: `%${title}%`
+        }
+      }
+
+      if (Boolean(byMe) === true) {
+        where = {
+          [Op.and]: [
+            {
+              title: {
+                [Op.iLike]: `%${title}%`
+              }
+            },
+            {
+              created_by: user_uid
+            }
+          ]
+        }
+      }
+
       const search = await recipes.findAndCountAll({
-        where: {
-          title: {
-            [Op.iLike]: `%${title}%`
-          }
-        },
+        where,
         limit,
         offset,
         order: [[sortBy, sort]]
@@ -56,6 +75,14 @@ class recipesNewController {
     } catch (error) {
       // console.log(error)
       if (
+        error.message.includes('"created_by" has invalid "undefined" value')
+      ) {
+        res.status(400).json({
+          status: 400,
+          message: 'If byMe true, user_uid is required'
+        })
+      } else if (
+        error.message.includes('must be a valid GUID') ||
         error.message.includes('is not allowed to be empty') ||
         error.message.includes('is not allowed') ||
         error.message.includes('must be one of') ||
