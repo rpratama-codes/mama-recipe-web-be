@@ -10,6 +10,7 @@ const Joi = require('joi')
 const { users } = require('../Sequelize/models')
 const cloudinary = require('../Utils/cloudinary')
 const transporter = require('../Utils/smtp')
+const { fcm, firestore } = require('../Utils/firebase')
 
 const userControllers = {
   _userRegister: async (req, res) => {
@@ -25,13 +26,14 @@ const userControllers = {
       const photoProfile =
         'https://hpsnf.com/wp-content/uploads/2021/04/avatar.jpg'
 
-      const { firstName, lastName, email, password } = req.body
+      const { firstName, lastName, email, password, device_id } = req.body
 
       const schema = Joi.object({
         firstName: Joi.string().min(1).max(20).required(),
         lastName: Joi.string().min(1).max(20).required(),
         email: Joi.string().email().required(),
-        password: Joi.string().required()
+        password: Joi.string().required(),
+        device_id: Joi.string().allow('').allow(null)
       })
 
       await schema.validateAsync(req.body)
@@ -75,6 +77,20 @@ const userControllers = {
               <p>If it's not you, please ignore this message or send request data removal to this email</p>
               `
       })
+
+      if (device_id) {
+        await firestore
+          .collection('devices')
+          .add({ user_uid: userUuid, device_id })
+
+        await fcm.send({
+          notification: {
+            title: 'Register Success',
+            body: 'Please check your email'
+          },
+          token: device_id
+        })
+      }
 
       res.status(201).send({
         status: 201,
