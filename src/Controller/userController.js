@@ -344,6 +344,15 @@ const userControllers = {
     try {
       const { user_uid } = req.locals.user
 
+      const checkVertification = await users.findAll({
+        where: { user_uid, verified: false }
+      })
+
+      if (checkVertification.length === 0) {
+        res.status(403).send('Link is invalid, or you have been verified')
+        return
+      }
+
       await users.update(
         { verified: true },
         {
