@@ -364,6 +364,23 @@ const userControllers = {
         where: { user_uid, verified: false }
       })
 
+      const getDeviceId = await firestore
+        .collection('devices')
+        .where('user_uid', '==', user_uid)
+        .get()
+
+      const extractDeviceId = getDeviceId.docs.map((doc) => doc.data())
+
+      if (!(extractDeviceId.length === 0)) {
+        await fcm.send({
+          notification: {
+            title: 'Email Verified',
+            body: 'Thankyou, Have a nice day!'
+          },
+          token: extractDeviceId[0].device_id
+        })
+      }
+
       if (checkVertification.length === 0) {
         res.status(403).send('Link is invalid, or you have been verified')
         return
