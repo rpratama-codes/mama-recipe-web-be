@@ -7,16 +7,18 @@ const cloudinary = require('../Utils/cloudinary')
 class recipesNewController {
   static async _search(req, res) {
     try {
-      let { title, amount, page, sortBy, sort, byMe, user_uid } = req.query
+      let { title, amount, page, sortBy, sort, byMe, user_uid, category } =
+        req.query
 
       const schema = Joi.object({
-        title: Joi.string().allow(''),
+        title: Joi.string().allow(null).allow(''),
         amount: Joi.number().min(1).max(10),
         page: Joi.number().min(1).max(10),
         sortBy: Joi.string().valid('title', 'latest'),
         sort: Joi.string().valid('asc', 'desc'),
         byMe: Joi.string().valid('true', 'false'),
-        user_uid: Joi.string().guid({ version: 'uuidv4', separator: '-' })
+        user_uid: Joi.string().guid({ version: 'uuidv4', separator: '-' }),
+        category: Joi.string().disallow('null').disallow('')
       })
 
       await schema.validateAsync(req.query)
@@ -33,7 +35,7 @@ class recipesNewController {
         }
       }
 
-      if (Boolean(byMe) === true) {
+      if (Boolean(byMe) === true && category) {
         where = {
           [Op.and]: [
             {
@@ -43,6 +45,39 @@ class recipesNewController {
             },
             {
               created_by: user_uid
+            },
+            {
+              category: {
+                [Op.iLike]: `%${category}%`
+              }
+            }
+          ]
+        }
+      } else if (Boolean(byMe) === true) {
+        where = {
+          [Op.and]: [
+            {
+              title: {
+                [Op.iLike]: `%${title}%`
+              }
+            },
+            {
+              created_by: user_uid
+            }
+          ]
+        }
+      } else if (category) {
+        where = {
+          [Op.and]: [
+            {
+              title: {
+                [Op.iLike]: `%${title}%`
+              }
+            },
+            {
+              category: {
+                [Op.iLike]: `%${category}%`
+              }
             }
           ]
         }
