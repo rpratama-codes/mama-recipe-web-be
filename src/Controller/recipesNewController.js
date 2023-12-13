@@ -7,16 +7,18 @@ const cloudinary = require('../Utils/cloudinary')
 class recipesNewController {
   static async _search(req, res) {
     try {
-      let { title, amount, page, sortBy, sort, byMe, user_uid } = req.query
+      let { title, amount, page, sortBy, sort, byMe, user_uid, category } =
+        req.query
 
       const schema = Joi.object({
-        title: Joi.string().allow(''),
+        title: Joi.string().allow(null).allow(''),
         amount: Joi.number().min(1).max(10),
         page: Joi.number().min(1).max(10),
         sortBy: Joi.string().valid('title', 'latest'),
         sort: Joi.string().valid('asc', 'desc'),
         byMe: Joi.string().valid('true', 'false'),
-        user_uid: Joi.string().guid({ version: 'uuidv4', separator: '-' })
+        user_uid: Joi.string().guid({ version: 'uuidv4', separator: '-' }),
+        category: Joi.string().disallow('null').disallow('')
       })
 
       await schema.validateAsync(req.query)
@@ -33,7 +35,7 @@ class recipesNewController {
         }
       }
 
-      if (Boolean(byMe) === true) {
+      if (Boolean(byMe) === true && category) {
         where = {
           [Op.and]: [
             {
@@ -43,6 +45,39 @@ class recipesNewController {
             },
             {
               created_by: user_uid
+            },
+            {
+              category: {
+                [Op.iLike]: `%${category}%`
+              }
+            }
+          ]
+        }
+      } else if (Boolean(byMe) === true) {
+        where = {
+          [Op.and]: [
+            {
+              title: {
+                [Op.iLike]: `%${title}%`
+              }
+            },
+            {
+              created_by: user_uid
+            }
+          ]
+        }
+      } else if (category) {
+        where = {
+          [Op.and]: [
+            {
+              title: {
+                [Op.iLike]: `%${title}%`
+              }
+            },
+            {
+              category: {
+                [Op.iLike]: `%${category}%`
+              }
             }
           ]
         }
@@ -109,34 +144,36 @@ class recipesNewController {
 
   static async _add(req, res) {
     try {
-      const data = JSON.parse(req.body.data)
-      const { user_uid } = req.locals.user
-
       const schema = Joi.object({
         title: Joi.string().min(5).max(30).required(),
-        description: Joi.string(),
-        ingredients: Joi.array().items(Joi.string().allow(null).allow('')),
-        steps: Joi.array().items(Joi.string().allow(null).allow('')),
-        video: Joi.string().uri(),
-        category: Joi.array().items(Joi.string())
+        description: Joi.string().allow(null).allow(''),
+        ingredients: Joi.string().allow(null).allow(''),
+        steps: Joi.string().allow(null).allow(''),
+        video: Joi.string().uri().allow(null).allow(''),
+        category: Joi.string().allow(null).allow('')
       })
 
-      await schema.validateAsync(data)
+      await schema.validateAsync(req.body)
 
-      const { title, description, ingredients, steps, video } = data
       const uuid = uuidv4()
+      const { user_uid } = req.locals.user
+      let { title, description, ingredients, steps, video, category } = req.body
+
+      if (!category || category === '') {
+        category = 'Uncategorized'
+      }
 
       const ingredientsObj = {
         title,
         desc: description,
-        ingridient: ingredients,
-        steps
+        ingridient: JSON.parse(ingredients),
+        steps: JSON.parse(steps)
       }
 
       cloudinary.uploader
         .upload_stream({ folder: 'recipe' }, async (error, result) => {
           if (result) {
-            await recipes.create({
+            const recipe = await recipes.create({
               title,
               status: 'public',
               video_url: video,
@@ -144,16 +181,20 @@ class recipesNewController {
               ingredients: ingredientsObj,
               sort_desc: description,
               rating: 4.7,
-              category: ['salty'],
+              category,
               created_by: user_uid,
               image: result.secure_url
             })
 
             res.status(201).json({
               status: 201,
-              message: 'recipe added'
+              message: 'recipe added',
+              data: {
+                recipes_uid: recipe.dataValues.recipes_uid
+              }
             })
           } else if (error) {
+            // console.log(error)
             res.status(error.http_code).json({
               status: error.http_code,
               message: error.message
