@@ -14,7 +14,7 @@ class recipesNewController {
         title: Joi.string().allow(null).allow(''),
         amount: Joi.number().min(1).max(10),
         page: Joi.number().min(1).max(10),
-        sortBy: Joi.string().valid('title', 'latest'),
+        sortBy: Joi.string().valid('title', 'date'),
         sort: Joi.string().valid('asc', 'desc'),
         byMe: Joi.string().valid('true', 'false'),
         user_uid: Joi.string().guid({ version: 'uuidv4', separator: '-' }),
@@ -25,7 +25,12 @@ class recipesNewController {
 
       const limit = !amount ? 6 : amount
       const offset = !page ? 0 : limit * (page - 1)
-      sortBy = !sortBy ? 'title' : sortBy
+      sortBy =
+        String(sortBy).toLocaleLowerCase() === 'title'
+          ? 'title'
+          : String(sortBy).toLocaleLowerCase() === 'date'
+          ? 'createdAt'
+          : 'title'
       sort = !sort ? 'asc' : sort
       title = !title ? '%' : title
 
@@ -35,7 +40,7 @@ class recipesNewController {
         }
       }
 
-      if (Boolean(byMe) === true && category) {
+      if (String(byMe).toLocaleLowerCase() === 'true' && category) {
         where = {
           [Op.and]: [
             {
@@ -53,7 +58,7 @@ class recipesNewController {
             }
           ]
         }
-      } else if (Boolean(byMe) === true) {
+      } else if (String(byMe).toLocaleLowerCase() === 'true') {
         where = {
           [Op.and]: [
             {
@@ -145,7 +150,7 @@ class recipesNewController {
   static async _add(req, res) {
     try {
       const schema = Joi.object({
-        title: Joi.string().min(5).max(30).required(),
+        title: Joi.string().min(5).max(50),
         description: Joi.string().allow(null).allow(''),
         ingredients: Joi.string().allow(null).allow(''),
         steps: Joi.string().allow(null).allow(''),
@@ -228,6 +233,29 @@ class recipesNewController {
           message: 'internal application error'
         })
       }
+    }
+  }
+
+  static async _delete(req, res) {
+    try {
+      const { recipes_uid } = req.body
+      const { user_uid } = req.locals.user
+
+      const deleteRecipe = await recipes.destroy({
+        where: { recipes_uid, created_by: user_uid }
+      })
+
+      console.log(deleteRecipe)
+      res.status(204).json({
+        status: 204,
+        message: 'recipe deleted'
+      })
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({
+        status: 500,
+        message: 'internal application error'
+      })
     }
   }
 }
