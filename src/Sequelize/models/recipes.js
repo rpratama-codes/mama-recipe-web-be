@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       ispopular: DataTypes.BOOLEAN,
       ingredients: DataTypes.JSONB,
       sort_desc: DataTypes.TEXT,
-      category: DataTypes.JSONB,
+      category: DataTypes.TEXT,
       rating: DataTypes.FLOAT,
       created_by: DataTypes.UUID
     },

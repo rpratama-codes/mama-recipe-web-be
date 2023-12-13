@@ -109,28 +109,30 @@ class recipesNewController {
 
   static async _add(req, res) {
     try {
-      const data = JSON.parse(req.body.data)
-      const { user_uid } = req.locals.user
-
       const schema = Joi.object({
         title: Joi.string().min(5).max(30).required(),
-        description: Joi.string(),
-        ingredients: Joi.array().items(Joi.string().allow(null).allow('')),
-        steps: Joi.array().items(Joi.string().allow(null).allow('')),
-        video: Joi.string().uri(),
-        category: Joi.array().items(Joi.string())
+        description: Joi.string().allow(null).allow(''),
+        ingredients: Joi.string().allow(null).allow(''),
+        steps: Joi.string().allow(null).allow(''),
+        video: Joi.string().uri().allow(null).allow(''),
+        category: Joi.string().allow(null).allow('')
       })
 
-      await schema.validateAsync(data)
+      await schema.validateAsync(req.body)
 
-      const { title, description, ingredients, steps, video } = data
       const uuid = uuidv4()
+      const { user_uid } = req.locals.user
+      let { title, description, ingredients, steps, video, category } = req.body
+
+      if (!category || category === '') {
+        category = 'Uncategorized'
+      }
 
       const ingredientsObj = {
         title,
         desc: description,
-        ingridient: ingredients,
-        steps
+        ingridient: JSON.parse(ingredients),
+        steps: JSON.parse(steps)
       }
 
       cloudinary.uploader
@@ -144,7 +146,7 @@ class recipesNewController {
               ingredients: ingredientsObj,
               sort_desc: description,
               rating: 4.7,
-              category: ['salty'],
+              category,
               created_by: user_uid,
               image: result.secure_url
             })
@@ -154,6 +156,7 @@ class recipesNewController {
               message: 'recipe added'
             })
           } else if (error) {
+            // console.log(error)
             res.status(error.http_code).json({
               status: error.http_code,
               message: error.message
