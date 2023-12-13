@@ -11,6 +11,7 @@ const receipesControllerDetails = require('../Controller/receipesControllerDetai
 const commentsControllerDetails = require('../Controller/commentsControllerDetails')
 const userControllers = require('../Controller/userController')
 const recipesNewController = require('../Controller/recipesNewController')
+const RecipePrivateController = require('../Controller/recipePrivateController')
 
 // midleware
 const Auth = require('../Middleware/Auth')
@@ -24,6 +25,17 @@ router.get('/', (req, res) => {
 
 // receipes endpoint
 // router.post('/test', upload.single('user-photo'), recipesNewController._test)
+router.post(
+  '/recipes/bookmark-add',
+  Auth.verify,
+  RecipePrivateController._bookmarkRecipe
+)
+router.delete(
+  '/recipes/bookmark-delete',
+  Auth.verify,
+  RecipePrivateController._bookmarkDelete
+)
+router.delete('/recipes/delete', Auth.verify, recipesNewController._delete)
 router.get('/recipes/search', recipesNewController._search)
 router.post(
   '/recipes/add',

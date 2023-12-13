@@ -235,6 +235,29 @@ class recipesNewController {
       }
     }
   }
+
+  static async _delete(req, res) {
+    try {
+      const { recipes_uid } = req.body
+      const { user_uid } = req.locals.user
+
+      const deleteRecipe = await recipes.destroy({
+        where: { recipes_uid, created_by: user_uid }
+      })
+
+      console.log(deleteRecipe)
+      res.status(204).json({
+        status: 204,
+        message: 'recipe deleted'
+      })
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({
+        status: 500,
+        message: 'internal application error'
+      })
+    }
+  }
 }
 
 module.exports = recipesNewController
