@@ -173,7 +173,7 @@ class recipesNewController {
       cloudinary.uploader
         .upload_stream({ folder: 'recipe' }, async (error, result) => {
           if (result) {
-            await recipes.create({
+            const recipe = await recipes.create({
               title,
               status: 'public',
               video_url: video,
@@ -188,7 +188,10 @@ class recipesNewController {
 
             res.status(201).json({
               status: 201,
-              message: 'recipe added'
+              message: 'recipe added',
+              data: {
+                recipes_uid: recipe.dataValues.recipes_uid
+              }
             })
           } else if (error) {
             // console.log(error)
