@@ -234,7 +234,7 @@ const userControllers = {
       const schema = Joi.object({
         first_name: Joi.string().required(),
         last_name: Joi.string().required(),
-        phone_number: Joi.string().required()
+        phone_number: Joi.number().allow('')
       })
 
       await schema.validateAsync(req.body)
@@ -242,8 +242,14 @@ const userControllers = {
       const { first_name, last_name, phone_number } = req.body
       const { user_uid } = req.locals.user
 
+      let updateObj = { first_name, last_name }
+
+      if (phone_number && phone_number !== null && phone_number !== '') {
+        updateObj = { ...updateObj, phone_number }
+      }
+
       await users.update(
-        { first_name, last_name, phone_number },
+        { ...updateObj },
         {
           where: {
             user_uid
@@ -258,6 +264,7 @@ const userControllers = {
     } catch (error) {
       // console.log(error)
       if (
+        error.message.includes('must be a number') ||
         error.message.includes('is not allowed to be empty') ||
         error.message.includes('must be a valid email') ||
         error.message.includes('is required') ||
