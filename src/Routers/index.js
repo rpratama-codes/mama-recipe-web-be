@@ -73,6 +73,11 @@ router.put(
   Auth.verify,
   userControllers._changePassword
 )
+router.put(
+  '/user/profile/update-password-new',
+  Auth.verify,
+  userControllers._changePasswordNew
+)
 router.post(
   '/user/profile/update-photo',
   Auth.verify,

@@ -234,7 +234,7 @@ const userControllers = {
       const schema = Joi.object({
         first_name: Joi.string().required(),
         last_name: Joi.string().required(),
-        phone_number: Joi.string().required()
+        phone_number: Joi.number().allow('')
       })
 
       await schema.validateAsync(req.body)
@@ -242,8 +242,14 @@ const userControllers = {
       const { first_name, last_name, phone_number } = req.body
       const { user_uid } = req.locals.user
 
+      let updateObj = { first_name, last_name }
+
+      if (phone_number && phone_number !== null && phone_number !== '') {
+        updateObj = { ...updateObj, phone_number }
+      }
+
       await users.update(
-        { first_name, last_name, phone_number },
+        { ...updateObj },
         {
           where: {
             user_uid
@@ -258,6 +264,7 @@ const userControllers = {
     } catch (error) {
       // console.log(error)
       if (
+        error.message.includes('must be a number') ||
         error.message.includes('is not allowed to be empty') ||
         error.message.includes('must be a valid email') ||
         error.message.includes('is required') ||
@@ -404,6 +411,75 @@ const userControllers = {
         status: 500,
         message: 'internal application error'
       })
+    }
+  },
+  _changePasswordNew: async (req, res) => {
+    try {
+      const schema = Joi.object({
+        old_password: Joi.string().min(1).max(30).required(),
+        password: Joi.string().min(8).max(30).required()
+      })
+
+      await schema.validateAsync(req.body)
+
+      const { password, old_password } = req.body
+      const { user_uid } = req.locals.user
+
+      const getPassword = await users.findOne({
+        attributes: ['password'],
+        where: { user_uid }
+      })
+
+      const isPassMatch = bcrypt.compareSync(
+        old_password,
+        getPassword.dataValues.password
+      )
+
+      if (!isPassMatch) {
+        throw { status: 401, message: 'wrong password' }
+      }
+
+      const saltRounds = 3
+      const salt = bcrypt.genSaltSync(saltRounds)
+      const hash = bcrypt.hashSync(password, salt)
+
+      await users.update(
+        { password: hash },
+        {
+          where: {
+            user_uid
+          }
+        }
+      )
+
+      res.status(200).json({
+        status: 200,
+        message: 'password changed'
+      })
+    } catch (error) {
+      // console.log(error)
+      if (error.status === 401) {
+        res.status(401).json({
+          status: 401,
+          message: error.message
+        })
+      } else if (
+        error.message.includes('is not allowed to be empty') ||
+        error.message.includes('is required') ||
+        error.message.includes('must be a string') ||
+        error.message.includes('length must be at least') ||
+        error.message.includes('length must be less than or equal to')
+      ) {
+        res.status(422).json({
+          status: 422,
+          message: String(error.message).replaceAll('"', "'")
+        })
+      } else {
+        res.status(500).json({
+          status: 500,
+          message: 'internal application error'
+        })
+      }
     }
   }
 }
