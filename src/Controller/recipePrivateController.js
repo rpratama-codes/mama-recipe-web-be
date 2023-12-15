@@ -1,4 +1,4 @@
-const { recipe_bookmarks } = require('../Sequelize/models')
+const { recipe_bookmarks, recipe_statistics } = require('../Sequelize/models')
 
 class RecipePrivateController {
   static async _bookmarkRecipe(req, res) {
@@ -11,7 +11,16 @@ class RecipePrivateController {
         defaults: { recipes_uid, user_uid }
       })
 
-      console.log(addBookmark)
+      await recipe_statistics.findOrCreate({
+        where: { recipes_uid },
+        defaults: { recipes_uid }
+      })
+
+      await recipe_statistics.increment('bookmarked', {
+        where: { recipes_uid }
+      })
+
+      // console.log(addBookmark)
       res.status(201).json({
         status: 200,
         message: 'bookmarked'
