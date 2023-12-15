@@ -23,6 +23,12 @@ router.get('/', (req, res) => {
   })
 })
 
+router.get(
+  '/recipes/getMyBookmark',
+  Auth.verify,
+  RecipePrivateController._getMyBookmark
+)
+
 router.post('/recipes/bookmark', Auth.verify, RecipePrivateController._bookmark)
 
 router.delete(
