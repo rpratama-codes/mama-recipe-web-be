@@ -1,7 +1,8 @@
 const {
   recipe_bookmarks,
   recipe_likes,
-  recipe_statistics
+  recipe_statistics,
+  recipes
 } = require('../Sequelize/models')
 const sql = require('../Utils/database')
 
@@ -187,6 +188,40 @@ class RecipePrivateController {
         status: 500,
         message: 'internal application error'
       })
+    }
+  }
+
+  static async _getMyRecipes(req, res) {
+    try {
+      const { user_uid } = req.locals.user
+
+      const data = await recipes.findAll({ where: { created_by: user_uid } })
+
+      if (data.length === 0) {
+        throw {
+          status: 404,
+          message: "Sorry you haven't create any recipes"
+        }
+      }
+
+      res.status(200).json({
+        status: 200,
+        message: 'ok',
+        data
+      })
+    } catch (error) {
+      console.log(error)
+      if (error.status === 404) {
+        res.status(404).json({
+          status: 404,
+          message: error.message
+        })
+      } else {
+        res.status(500).json({
+          status: 500,
+          message: 'internal app error'
+        })
+      }
     }
   }
 }

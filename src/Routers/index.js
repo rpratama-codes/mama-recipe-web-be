@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 })
 
 router.get(
-  '/recipes/getMyBookmark',
+  '/recipes/getmybookmark',
   Auth.verify,
   RecipePrivateController._getMyBookmark
 )
@@ -38,7 +38,7 @@ router.delete(
 )
 
 router.get(
-  '/recipes/getMyLikes',
+  '/recipes/getmylikes',
   Auth.verify,
   RecipePrivateController._getMyLikes
 )
@@ -49,6 +49,12 @@ router.delete(
   '/recipes/dislike',
   Auth.verify,
   RecipePrivateController._dislikeRecipe
+)
+
+router.get(
+  '/recipes/getmyrecipe',
+  Auth.verify,
+  RecipePrivateController._getMyRecipes
 )
 
 router.delete('/recipes/delete', Auth.verify, recipesNewController._delete)
