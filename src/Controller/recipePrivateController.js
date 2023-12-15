@@ -195,7 +195,10 @@ class RecipePrivateController {
     try {
       const { user_uid } = req.locals.user
 
-      const data = await recipes.findAll({ where: { created_by: user_uid } })
+      const data = await recipes.findAll({
+        where: { created_by: user_uid },
+        order: [['createdAt', 'DESC']]
+      })
 
       if (data.length === 0) {
         throw {
