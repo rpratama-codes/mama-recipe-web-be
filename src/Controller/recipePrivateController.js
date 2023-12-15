@@ -5,7 +5,7 @@ const {
 } = require('../Sequelize/models')
 
 class RecipePrivateController {
-  static async _bookmarkRecipe(req, res) {
+  static async _bookmark(req, res) {
     try {
       const { recipes_uid } = req.body
       const { user_uid } = req.locals.user
@@ -38,7 +38,7 @@ class RecipePrivateController {
     }
   }
 
-  static async _bookmarkDelete(req, res) {
+  static async _unbookmark(req, res) {
     try {
       const { recipes_uid } = req.body
       const { user_uid } = req.locals.user
@@ -84,6 +84,29 @@ class RecipePrivateController {
       res.status(200).json({
         status: 200,
         message: 'liked'
+      })
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({
+        status: 500,
+        message: 'internal application error'
+      })
+    }
+  }
+
+  static async _dislikeRecipe(req, res) {
+    try {
+      const { recipes_uid } = req.body
+      const { user_uid } = req.locals.user
+
+      const deleteLike = await recipe_likes.destroy({
+        where: { recipes_uid, user_uid }
+      })
+
+      console.log(deleteLike)
+      res.status(200).json({
+        status: 200,
+        message: 'disliked'
       })
     } catch (error) {
       console.log(error)

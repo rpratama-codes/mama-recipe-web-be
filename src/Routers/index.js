@@ -23,22 +23,20 @@ router.get('/', (req, res) => {
   })
 })
 
-router.post(
-  '/recipes/bookmark-add',
-  Auth.verify,
-  RecipePrivateController._bookmarkRecipe
-)
-
-router.post(
-  '/recipes/like-add',
-  Auth.verify,
-  RecipePrivateController._likeRecipe
-)
+router.post('/recipes/bookmark', Auth.verify, RecipePrivateController._bookmark)
 
 router.delete(
-  '/recipes/bookmark-delete',
+  '/recipes/unbookmark',
   Auth.verify,
-  RecipePrivateController._bookmarkDelete
+  RecipePrivateController._unbookmark
+)
+
+router.post('/recipes/like', Auth.verify, RecipePrivateController._likeRecipe)
+
+router.delete(
+  '/recipes/dislike',
+  Auth.verify,
+  RecipePrivateController._dislikeRecipe
 )
 
 router.delete('/recipes/delete', Auth.verify, recipesNewController._delete)
