@@ -23,20 +23,27 @@ router.get('/', (req, res) => {
   })
 })
 
-// receipes endpoint
-// router.post('/test', upload.single('user-photo'), recipesNewController._test)
 router.post(
   '/recipes/bookmark-add',
   Auth.verify,
   RecipePrivateController._bookmarkRecipe
 )
+
+router.post(
+  '/recipes/like-add',
+  Auth.verify,
+  RecipePrivateController._likeRecipe
+)
+
 router.delete(
   '/recipes/bookmark-delete',
   Auth.verify,
   RecipePrivateController._bookmarkDelete
 )
+
 router.delete('/recipes/delete', Auth.verify, recipesNewController._delete)
 router.get('/recipes/search', recipesNewController._search)
+
 router.post(
   '/recipes/add',
   Auth.verify,
