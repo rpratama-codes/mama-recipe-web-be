@@ -98,6 +98,42 @@ class RecipePrivateController {
     }
   }
 
+  static async _getMyLikes(req, res) {
+    try {
+      const { user_uid } = req.locals.user
+
+      const data =
+        await sql`select r.title, r.image , r.video_url, r.recipes_uid, r.ingredients , r.sort_desc , r.category 
+        from recipe_likes rl  left join recipes r on rl.recipes_uid = r.recipes_uid where rl.user_uid =${user_uid};`
+
+      if (data.length === 0) {
+        throw {
+          status: 404,
+          message: "Sorry you haven't like any recipes"
+        }
+      }
+
+      res.status(200).json({
+        status: 200,
+        message: 'ok',
+        data
+      })
+    } catch (error) {
+      console.log(error)
+      if (error.status === 404) {
+        res.status(404).json({
+          status: 404,
+          message: error.message
+        })
+      } else {
+        res.status(500).json({
+          status: 500,
+          message: 'internal app error'
+        })
+      }
+    }
+  }
+
   static async _likeRecipe(req, res) {
     try {
       const { recipes_uid } = req.body

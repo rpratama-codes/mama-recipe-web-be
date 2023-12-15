@@ -37,6 +37,12 @@ router.delete(
   RecipePrivateController._unbookmark
 )
 
+router.get(
+  '/recipes/getMyLikes',
+  Auth.verify,
+  RecipePrivateController._getMyLikes
+)
+
 router.post('/recipes/like', Auth.verify, RecipePrivateController._likeRecipe)
 
 router.delete(
