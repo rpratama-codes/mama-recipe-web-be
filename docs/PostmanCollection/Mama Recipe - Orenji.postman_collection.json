@@ -1,0 +1,711 @@
+{
+	"info": {
+		"_postman_id": "83794fa3-c200-419d-a473-b981f741b492",
+		"name": "Mama Recipe / Orenji",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17089615"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"{{$randomFirstName}}\",\n    \"lastName\": \"{{$randomLastName}}\",\n    \"email\": \"real-email@example.com\",\n    \"password\": \"good-password\"\n}\n\n// Please use Real Email, Need for verification.",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"real-email@example.com\",\n    \"password\": \"good-password\"\n}\n\n// To Login need to verify email.",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail Profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\n// by default using existing Bearer Token that has no expired",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Info",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"{{$randomFirstName}}\",\n    \"last_name\": \"{{$randomLastName}}\",\n    \"phone_number\": \"088800111000\"\n}\n\n// by default using existing Bearer Token that has no expired\n// Phone Number is String but must have number value, cant use (+) symbol  \n// ex: 6288800111000",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/profile/edit",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"profile",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Password",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"old_password\": \"good-password\",\n    \"password\": \"new-good-password\"\n}\n\n// by default using existing Bearer Token that has no expired",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/profile/update-password-new",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"profile",
+								"update-password-new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Photo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user-photo",
+									"description": "Please use \"user-photo\" as input field name.",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "",
+									"value": "",
+									"description": "// by default using existing Bearer Token that has no expired",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/user/profile/update-photo",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"profile",
+								"update-photo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Recipes",
+			"item": [
+				{
+					"name": "Get List Recipe",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/home/list",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"home",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List Popular",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/home/popular",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"home",
+								"popular"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List New",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/home/new",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"home",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail by recipes_uid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/recipes/:receiptUid",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								":receiptUid"
+							],
+							"variable": [
+								{
+									"key": "receiptUid",
+									"value": "6ad91414-6013-41b0-9eae-50212486e453"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search by title",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/recipes/search?page=1&amount=6&sortBy=date&sort=desc&byMe=true&user_uid=403f3a94-3752-4d8f-a1ce-28fd4f9fd701",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "number | default 1"
+								},
+								{
+									"key": "amount",
+									"value": "6",
+									"description": "number | default 6"
+								},
+								{
+									"key": "sortBy",
+									"value": "date",
+									"description": "title | date | default title"
+								},
+								{
+									"key": "sort",
+									"value": "desc",
+									"description": "asc | desc | default asc"
+								},
+								{
+									"key": "byMe",
+									"value": "true",
+									"description": "true | false | default false"
+								},
+								{
+									"key": "user_uid",
+									"value": "403f3a94-3752-4d8f-a1ce-28fd4f9fd701",
+									"description": "string uuidv4 | Required if byMe == true"
+								},
+								{
+									"key": "category",
+									"value": "Dishes",
+									"description": "Dishes | Drink | Dessert | Snack",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get my recipes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/recipes/getmyrecipe",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"getmyrecipe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Recipe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "recipe-image",
+									"description": "file not allow to be empty",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "title",
+									"value": "Bakso Ikan Tengiri Kenyal",
+									"description": "string not allow to be empty",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Bagi penggemar bakso, wajib nih untuk mencoba bikin bakso yang lebih lezat dan sehat sendiri di rumah. Bakso yang lezat tak harus berbahan dasar daging merah. Kamu bisa memanfaatkan beragam bahan makanan lain yang lebih menggugah selera. Salah satunya yakni ikan. Ada aneka jenis ikan yang bisa digunakan sebagai bahan dasar bakso. \n\nLantas seperti apa cara membuat bakso ikan? Berikut ada beberapa resep bakso ikan yang tak hanya lezat tetapi juga sehat. Simak baik-baik resepnya di bawah ini ya.",
+									"description": "string",
+									"type": "text"
+								},
+								{
+									"key": "ingredients",
+									"value": "[\"1 kg daging ikan tengiri\",\n\"1 gelas air dingin\",\n\"es batu secukupnya, haluskan\",\n\"4 butir putih telur\",\n\"12 sdm tepung tapioka\",\n\"5 siung bawang putih\",\n\"4 butir bawang merah goreng dan haluskan\",\n\"1 sdt lada\",\n\"1 sdt baking powder\",\n\"garam dan penyedap rasa secukupnya\"]",
+									"description": "Array of string - Note : You Must Stringify on application code level",
+									"type": "text"
+								},
+								{
+									"key": "steps",
+									"value": "[\"Masukkan daging ikan, garam, penyedap rasa, lada, bawang, air, putih telur dan es batu.\",\n\"Aduk semua bahan sampai rata.\",\n\"Tambahkan tepung tapioka yang sudah dicampur dengan baking powder.\",\n\"Aduk terus adonan sambil dibanting agar mudah dibentuk.\",\n\"Panaskan air sampai mendidih, matikan.Bulatkan bakso dan masukkan dalam air mendidih.\",\n\"Nyalakan lagi kompor dan masak bakso sampai mengapung.\",\n\"Angkat lalu masukkan bakso dalam air es.Tiriskan.\",\n\"Bakso ikan siap disajikan dengan kuah lezat.\"]",
+									"description": "Use JSON.stringiyf() then backend Must JSON.parse()",
+									"type": "text"
+								},
+								{
+									"key": "video",
+									"value": "https://www.youtube.com/watch?v=iwQPXI4BpuU",
+									"description": "string",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Bakso, Sup",
+									"description": "string",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/recipes/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recipe Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"recipes_uid\" : \"b3e9f81c-f932-4ec0-94a3-44acc09227e7\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/recipes/delete",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get my bookmark",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/recipes/getmybookmark",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"getmybookmark"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recipe Bookmark",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"recipes_uid\" : \"c9221332-3ef8-4631-ab50-161dbe966304\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/recipes/bookmark",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"bookmark"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recipe unbookmark",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"recipes_uid\" : \"c9221332-3ef8-4631-ab50-161dbe966304\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/recipes/unbookmark",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"unbookmark"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get my likes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/recipes/getmylikes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"getmylikes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recipe Like",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"recipes_uid\" : \"19d248a7-cc3f-46c5-8bac-62544a32546c\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/recipes/like",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recipe Dislike",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"recipes_uid\" : \"c9221332-3ef8-4631-ab50-161dbe966304\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/recipes/dislike",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"dislike"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Get comment by recipe_uid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/recipes/:recipeUid/detail/comments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								":recipeUid",
+								"detail",
+								"comments"
+							],
+							"variable": [
+								{
+									"key": "recipeUid",
+									"value": "d1658fc2-32ee-40b9-a074-1ce3e7eca8e3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"recipeUid\": \"23cfa801-0957-4393-9008-a476e1d28b2f\",\n    \"message\": \"Bagus banget resepnya\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/comments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3001",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "url",
+			"value": "https://mama-recipe-web-be.vercel.app",
+			"type": "string"
+		}
+	]
+}
