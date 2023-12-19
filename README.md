@@ -8,8 +8,8 @@ Developer :
 
 > ![developer](https://contrib.rocks/image?repo=Team-A-Pijarcamp-Batch-15/receipes-web-be&anon=false)
 
-Tech Stack : Javascript, ExpressJS, Sequelize ORM, Postgres, Firebase Cloud Messaging (Admin), Firestore (Admin), SMTP, Cloudinary".  
-Backend End Point : <https://mama-recipe-web-be.vercel.app>
+Tech Stack : ExpressJS, Sequelize ORM, Postgres, FCM (Admin), Firestore (Admin), SMTP, Cloudinary".  
+Backend URL : <https://mama-recipe-web-be.vercel.app>
 
 ## Table Of Content
 
@@ -98,7 +98,7 @@ To try our Api's please import the postman api collection on folder ``docs/Postm
 
 ### Run on local
 
-To running this project localy please do step by step carefully if not this will not run or not running propperly. you may need ``.env.example`` file to guid setup the environment.
+To running this project localy please do step by step carefully if not this will not run or not running propperly. you may need ``.env.example`` file to guide setup the environment.
 
 1. Clone this repository
    > ``git clone https://github.com/Team-A-Pijarcamp-Batch-15/receipes-web-be``
