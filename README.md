@@ -22,6 +22,7 @@ Backend URL : <https://mama-recipe-web-be.vercel.app>
     - [Run on local](#run-on-local)
     - [Run on production](#run-on-production)
   - [Architecture and Data Flow](#architecture-and-data-flow)
+  - [Releated Project](#releated-project)
 
 ## Api Collection
 
@@ -132,3 +133,10 @@ On production has a variety way to run the application, Every detail step is imp
 > **Note : This is not an actual data flow, it just an overview from overall business logic. Beautiful Isn't it?**
 
 ![arch](./docs/Pictures/architecture.png)
+
+## Releated Project
+
+- [✨ Mama Recipe Api Collection](https://documenter.getpostman.com/view/31887036/2s9YkoeMvV)
+- [✨ Mama Recipe Web Frontend](https://github.com/Team-A-Pijarcamp-Batch-15/recipes-web-fe)
+- [✨ Mama Recipe Web Backend](https://github.com/Team-A-Pijarcamp-Batch-15/receipes-web-be)
+- [✨ Orenji React Native Mobile](https://github.com/rizqikazukun/orenji-native-mobile)
