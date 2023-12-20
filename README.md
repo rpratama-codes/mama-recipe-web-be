@@ -22,10 +22,11 @@ Backend URL : <https://mama-recipe-web-be.vercel.app>
     - [Run on local](#run-on-local)
     - [Run on production](#run-on-production)
   - [Architecture and Data Flow](#architecture-and-data-flow)
+  - [Releated Project](#releated-project)
 
 ## Api Collection
 
-[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://god.gw.postman.com/run-collection/31887036-b7325b32-ede3-44ee-97f0-7167c422f018?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D31887036-b7325b32-ede3-44ee-97f0-7167c422f018%26entityType%3Dcollection%26workspaceId%3Da3e74e79-7441-46b7-ab79-84fcc8a5c2a8)
+[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://documenter.getpostman.com/view/31887036/2s9YkoeMvV)
 
 To try our Api's please import the postman api collection on folder ``docs/PostmanCollection/`` or fork by button above.
 
@@ -132,3 +133,10 @@ On production has a variety way to run the application, Every detail step is imp
 > **Note : This is not an actual data flow, it just an overview from overall business logic. Beautiful Isn't it?**
 
 ![arch](./docs/Pictures/architecture.png)
+
+## Releated Project
+
+- [✨ Mama Recipe Api Collection](https://documenter.getpostman.com/view/31887036/2s9YkoeMvV)
+- [✨ Mama Recipe Web Frontend](https://github.com/Team-A-Pijarcamp-Batch-15/recipes-web-fe)
+- [✨ Mama Recipe Web Backend](https://github.com/Team-A-Pijarcamp-Batch-15/receipes-web-be)
+- [✨ Orenji React Native Mobile](https://github.com/rizqikazukun/orenji-native-mobile)
