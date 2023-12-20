@@ -25,7 +25,7 @@ Backend URL : <https://mama-recipe-web-be.vercel.app>
 
 ## Api Collection
 
-[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://god.gw.postman.com/run-collection/31887036-b7325b32-ede3-44ee-97f0-7167c422f018?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D31887036-b7325b32-ede3-44ee-97f0-7167c422f018%26entityType%3Dcollection%26workspaceId%3Da3e74e79-7441-46b7-ab79-84fcc8a5c2a8)
+[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://documenter.getpostman.com/view/31887036/2s9YkoeMvV)
 
 To try our Api's please import the postman api collection on folder ``docs/PostmanCollection/`` or fork by button above.
 
