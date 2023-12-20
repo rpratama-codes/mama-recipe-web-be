@@ -36,6 +36,8 @@ To try our Api's please import the postman api collection on folder ``docs/Postm
 
 ### Login Api
 
+This api we use to login into the application.
+
 > **This is an example how to use the Login Api.**  
 > Make a ``POST`` Request to ``{{url}}/user/login`` with body json
 
@@ -66,6 +68,8 @@ To try our Api's please import the postman api collection on folder ``docs/Postm
 > And select the Bearer Token for the Auth Type.
 
 ### Detail Profile Api
+
+This api is we use to get our detail info, but this api is protected by auth.  You have lo put the token from login before continue to access the protected api.
 
 > **Then let make a request to protected api**  
 > Make a ``GET`` Request to ``{{url}}/user/profile``
