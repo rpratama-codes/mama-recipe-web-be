@@ -19,12 +19,12 @@ const recipeHomeController = {
           status: 404,
           message: error.message
         })
+      } else {
+        res.status(500).json({
+          status: 500,
+          message: error.message
+        })
       }
-      // console.log(error)
-      res.status(500).json({
-        status: 500,
-        message: error.message
-      })
     }
   },
   getListRecipe_Controller: async (req, res) => {
