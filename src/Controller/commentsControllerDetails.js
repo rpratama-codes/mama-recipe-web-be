@@ -48,21 +48,12 @@ const commentsControllersDetails = {
       await schema.validateAsync(req.body, validateOptions)
 
       const { recipeUid, message } = req.body
-      const { authorization } = req.headers
 
-      await jwt.verify(
-        authorization.split('Bearer ')[1],
-        process.env.APP_SECRET_TOKEN
-      )
-
-      const usr = await jwt.decode(
-        authorization.split('Bearer ')[1],
-        process.env.APP_SECRET_TOKEN
-      )
+      const { user_uid } = req.locals.user
 
       const request = await commentsModelsDetail.addComment({
         recipeUid,
-        userUid: usr.user_uid,
+        userUid: user_uid,
         message
       })
 
@@ -88,11 +79,6 @@ const commentsControllersDetails = {
         res.status(422).json({
           status: 422,
           message: String(error.message).replaceAll('"', "'").split('. ')
-        })
-      } else if (error?.status === 401 || error?.name === 'JsonWebTokenError') {
-        res.status(401).json({
-          status: 401,
-          message: 'unautorize'
         })
       } else {
         res.status(500).json({
