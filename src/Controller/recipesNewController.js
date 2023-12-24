@@ -155,7 +155,8 @@ class recipesNewController {
         ingredients: Joi.string().allow(null).allow(''),
         steps: Joi.string().allow(null).allow(''),
         video: Joi.string().uri().allow(null).allow(''),
-        category: Joi.string().allow(null).allow('')
+        category: Joi.string().allow(null).allow(''),
+        'recipe-image': Joi.any()
       })
 
       await schema.validateAsync(req.body)
