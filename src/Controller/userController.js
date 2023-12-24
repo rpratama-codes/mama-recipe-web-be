@@ -219,7 +219,14 @@ const userControllers = {
       res.status(200).send({
         status: 200,
         message: 'ok',
-        data: { first_name, last_name, phone_number, email, photo_profile }
+        data: {
+          first_name,
+          last_name,
+          phone_number,
+          email,
+          photo_profile,
+          user_uid
+        }
       })
     } catch (error) {
       // console.log(error)
