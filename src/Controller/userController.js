@@ -363,6 +363,40 @@ const userControllers = {
       })
     }
   },
+  _changeEmail: async (req, res) => {
+    try {
+      const schema = Joi.object({
+        email: Joi.string().required()
+      })
+
+      await schema.validateAsync(req.body, { abortEarly: false })
+      const { email } = req.body
+      const { user_uid } = req.locals.user
+      let updateObj = { email: String(email) }
+      const [rowsAffected, [updatedUser]] = await users.update(updateObj, {
+        where: {
+          user_uid
+        },
+        returning: true
+      })
+
+      if (rowsAffected > 0) {
+        res.status(200).json({
+          status: 200,
+          message: 'email updated',
+          email: email
+        })
+      } else {
+        res.status(404).json({
+          status: 404,
+          message: 'User not found'
+        })
+      }
+    } catch (error) {
+      console.log(error)
+      res.status(400).json({ error: error.message || 'Bad request' })
+    }
+  },
   _verifyEmail: async (req, res) => {
     try {
       const { user_uid } = req.locals.user

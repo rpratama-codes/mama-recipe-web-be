@@ -90,6 +90,25 @@ router.get('/home/new', receipeHomeController.getNewRecipe_Controller)
 router.post('/user/register', userControllers._userRegister)
 router.post('/user/login', userControllers._userLogin)
 router.get('/user/profile', Auth.verify, userControllers._userProfile)
+// router.post(
+//   '/user/profile/edit-email',
+//   Auth.verify,
+//   userControllers._changeEmail
+// )
+router.post(
+  '/user/profile/edit-email',
+  Auth.verify,
+  userControllers._changeEmail,
+  (err, req, res, next) => {
+    // Pengelola kesalahan untuk _changeEmail
+    console.error(err)
+    res.status(500).json({
+      status: 500,
+      message: 'Internal Server Error'
+    })
+  }
+)
+
 router.put('/user/profile/edit', Auth.verify, userControllers._editProfile)
 router.put(
   '/user/profile/update-password',
