@@ -74,7 +74,7 @@ router.get(
 
 // comment endpoint
 router.get('/comments', commentsControllerDetails._getAllComments)
-router.post('/comments', commentsControllerDetails._addComment)
+router.post('/comments', Auth.verify, commentsControllerDetails._addComment)
 router.post('/recipes/detail', receipesControllerDetails._getRecipesByTitle)
 router.get(
   '/recipes/:recipeUid/detail/comments',
