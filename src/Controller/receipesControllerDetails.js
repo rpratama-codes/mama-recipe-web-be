@@ -1,8 +1,7 @@
 const receipesModelsDetails = require('../Models/receipesModelDetails')
-const { users } = require('../Sequelize/models')
+const { users, recipe_statistics } = require('../Sequelize/models')
 
 const receipesControllerDetails = {
-
   _getAllReceipes: async (req, res) => {
     try {
       const request = await receipesModelsDetails.getAllReceipes() // merequest get all receipes dari model
@@ -28,6 +27,16 @@ const receipesControllerDetails = {
         attributes: ['first_name', 'last_name'],
         where: { user_uid: requestRecipe[0].created_by }
       })
+
+      await recipe_statistics.findOrCreate({
+        where: { recipes_uid: receiptUid },
+        defaults: { recipes_uid: receiptUid }
+      })
+
+      await recipe_statistics.increment('views', {
+        where: { recipes_uid: receiptUid }
+      })
+
       const data = [{ ...requestRecipe[0], ...requestUser.dataValues }]
       res.status(200).json({
         status: 200,
