@@ -64,7 +64,7 @@ const userControllers = {
       )
 
       await transporter.sendMail({
-        from: `"Orenji / Mama Recipe" <${process.env.GOOGLE_EMAIL}>`,
+        from: `"Orenji / Mama Recipe" <${process.env['SMTP_EMAIL']}>`,
         to: email,
         subject: 'Email Verification',
         html: `<h1>Registration success</h1>  

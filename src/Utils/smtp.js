@@ -5,10 +5,15 @@ if (process.env.NODE_ENV !== 'production') {
 const nodemailer = require('nodemailer')
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: process.env['SMTP_HOST'],
+  port: process.env['SMTP_PORT'],
+  tls: {
+    rejectUnauthorized: true,
+    minVersion: 'TLSv1.2'
+  },
   auth: {
-    user: process.env.GOOGLE_EMAIL,
-    pass: process.env.GOOGLE_APP_PASSWORD
+    user: process.env['SMTP_USER'],
+    pass: process.env['SMTP_PASS']
   }
 })
 
